@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ChipLink } from "@/components/atoms";
+import { ChipLink } from "@/components/atoms/Chip";
 import { pluralize } from "@/lib/format";
 
 interface CategoryHeaderProps {

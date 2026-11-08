@@ -1,5 +1,7 @@
 import { CircleSlash } from "lucide-react";
-import { Badge, ChipLink, Price } from "@/components/atoms";
+import { Badge } from "@/components/atoms/Badge";
+import { ChipLink } from "@/components/atoms/Chip";
+import { Price } from "@/components/atoms/Price";
 import { AddToCartWithQuantity } from "@/components/molecules/AddToCartButton";
 import type { Product } from "@/types";
 

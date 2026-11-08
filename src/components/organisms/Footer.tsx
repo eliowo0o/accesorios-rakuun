@@ -1,5 +1,6 @@
 import { MapPin, ShoppingCart } from "lucide-react";
-import { Badge } from "@/components/atoms";
+import { Badge } from "@/components/atoms/Badge";
+import { buttonClass } from "@/components/atoms/Button";
 import type { StoreSettings } from "@/types";
 
 /** lucide-react 1.x ya no trae íconos de marcas: glifo SVG propio de Instagram. */
@@ -64,7 +65,7 @@ export function Footer({ settings }: { settings: FooterSettings }) {
               href={settings.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary-soft px-4 font-display text-sm font-semibold text-primary-hover transition-colors hover:bg-primary-soft-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              className={buttonClass({ variant: "secondary", className: "px-4 text-primary-hover" })}
             >
               <InstagramIcon className="size-5" />
               Instagram

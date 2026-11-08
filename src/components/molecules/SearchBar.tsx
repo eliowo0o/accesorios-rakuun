@@ -31,7 +31,7 @@ export function SearchBar({ defaultQuery = "", className }: { defaultQuery?: str
         enterKeyHint="search"
         className={cn(
           "h-12 w-full rounded-full border border-line bg-white pl-12 pr-12 text-base text-ink placeholder:text-gray-500",
-          "transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25",
+          "transition-colors focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
           "[&::-webkit-search-cancel-button]:appearance-none",
         )}
       />

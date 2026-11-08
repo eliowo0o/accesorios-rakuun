@@ -31,8 +31,8 @@
   --color-muted: #6b7280;
   --color-line: #e5e7eb;
   --color-danger: #b42318;
-  --color-whatsapp: #1dbf73;
-  --color-whatsapp-hover: #17a362;
+  --color-whatsapp: #0f7a45;
+  --color-whatsapp-hover: #0b6338;
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-poppins);
@@ -58,4 +58,6 @@ body {
 
 html {
   scroll-behavior: smooth;
+  /* Header + barra de categorías fijos: que los anclas no queden debajo. */
+  scroll-padding-top: 8rem;
 }

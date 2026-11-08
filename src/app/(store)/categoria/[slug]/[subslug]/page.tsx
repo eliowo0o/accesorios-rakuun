@@ -9,7 +9,7 @@ import { ProductGrid } from "@/components/organisms/ProductGrid";
 import { CatalogTemplate } from "@/components/templates/CatalogTemplate";
 import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/site";
-import { getAllProducts, getCategoryTree, getProductsByCategory, getStoreSettings } from "@/services/catalog";
+import { getCategoryTree, getProductCount, getProductsByCategory, getStoreSettings } from "@/services/catalog";
 import type { CategoryWithChildren } from "@/types";
 import { categoryBreadcrumbs } from "../../../_lib/catalog";
 
@@ -49,19 +49,19 @@ export async function generateMetadata({ params }: PageProps<"/categoria/[slug]/
 
 export default async function SubcategoryPage({ params }: PageProps<"/categoria/[slug]/[subslug]">) {
   const { slug, subslug } = await params;
-  const tree = await getCategoryTree();
+  const [tree, totalCount] = await Promise.all([getCategoryTree(), getProductCount()]);
   const found = resolve(tree, slug, subslug);
   if (!found) notFound();
   const { parent, sub } = found;
 
-  const [products, all] = await Promise.all([getProductsByCategory(sub.id), getAllProducts()]);
+  const products = await getProductsByCategory(sub.id);
   const crumbs = categoryBreadcrumbs(parent, sub);
 
   return (
     <>
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
       <CatalogTemplate
-        nav={<CategoryBar tree={tree} totalCount={all.length} activeSlug={parent.slug} activeSubSlug={sub.slug} />}
+        nav={<CategoryBar tree={tree} totalCount={totalCount} activeSlug={parent.slug} activeSubSlug={sub.slug} />}
         header={
           <CategoryHeader
             title={sub.name}
@@ -83,7 +83,7 @@ export default async function SubcategoryPage({ params }: PageProps<"/categoria/
         <ProductGrid
           products={products}
           labelFor={() => parent.name}
-          preloadFirst
+          preload="first"
           empty={<EmptyState title={`Aún no hay productos en ${sub.name}`}>Mira todo lo de {parent.name}.</EmptyState>}
         />
       </CatalogTemplate>

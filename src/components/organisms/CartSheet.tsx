@@ -1,7 +1,8 @@
 "use client";
 
-import { MessageCircle, ShoppingBag, TriangleAlert } from "lucide-react";
-import { Button, Price } from "@/components/atoms";
+import { CircleCheck, MessageCircle, ShoppingBag, TriangleAlert } from "lucide-react";
+import { Button } from "@/components/atoms/Button";
+import { Price } from "@/components/atoms/Price";
 import { Sheet } from "@/components/molecules/Sheet";
 import { CartLine } from "@/components/molecules/CartLine";
 import { CheckoutForm } from "@/components/organisms/CheckoutForm";
@@ -30,18 +31,19 @@ export function CartSheet({ settings }: { settings: StoreSettings }) {
 
       <Sheet.Body>
         {cart.notices.length > 0 && <CartNotices notices={cart.notices} onDismiss={cart.dismissNotices} />}
+        {checkout.orderSent && <OrderSent onClear={checkout.clearCart} />}
 
         {isEmpty ? (
           <EmptyCart onBrowse={cart.close} />
         ) : (
           <>
-            <ul aria-label="Productos en tu pedido">
+            <ul aria-label="Productos en tu carrito">
               {cart.items.map((item) => (
                 <CartLine
                   key={item.productId}
                   item={item}
-                  onDecrement={() => cart.setQuantity(item.productId, item.quantity - 1)}
-                  onIncrement={() => cart.setQuantity(item.productId, item.quantity + 1)}
+                  onDecrement={() => cart.decrement(item.productId)}
+                  onIncrement={() => cart.increment(item.productId)}
                   onRemove={() => cart.remove(item.productId)}
                   onNavigate={cart.close}
                 />
@@ -89,7 +91,7 @@ function CartNotices({ notices, onDismiss }: { notices: CartNotice[]; onDismiss:
       <div className="flex gap-2">
         <TriangleAlert className="mt-0.5 size-4 shrink-0 text-amber-700" aria-hidden />
         <div className="min-w-0 flex-1">
-          <p className="font-display font-semibold">Actualizamos tu pedido</p>
+          <p className="font-display font-semibold">Actualizamos tu carrito</p>
           <ul className="mt-1 space-y-1">
             {notices.map((n, i) => (
               <li key={`${n.productId}-${n.kind}-${i}`}>{describeCartNotice(n)}</li>
@@ -98,10 +100,22 @@ function CartNotices({ notices, onDismiss }: { notices: CartNotice[]; onDismiss:
         </div>
       </div>
       <div className="mt-2 flex justify-end">
-        <Button variant="ghost" size="sm" onClick={onDismiss}>
+        <Button variant="ghost" size="sm" onClick={onDismiss} className="h-11">
           Entendido
         </Button>
       </div>
+    </div>
+  );
+}
+
+function OrderSent({ onClear }: { onClear: () => void }) {
+  return (
+    <div role="status" className="mb-3 flex flex-wrap items-center gap-3 rounded-2xl bg-primary-soft p-4 text-sm text-ink">
+      <CircleCheck className="size-5 shrink-0 text-primary" aria-hidden />
+      <p className="min-w-0 flex-1 font-display font-semibold">Abrimos WhatsApp con tu pedido</p>
+      <Button variant="outline" size="sm" onClick={onClear} className="h-11">
+        Vaciar carrito
+      </Button>
     </div>
   );
 }
@@ -112,7 +126,7 @@ function EmptyCart({ onBrowse }: { onBrowse: () => void }) {
       <span className="flex size-16 items-center justify-center rounded-full bg-primary-soft text-primary">
         <ShoppingBag className="size-7" aria-hidden />
       </span>
-      <p className="mt-4 font-display text-lg font-bold">Tu pedido está vacío</p>
+      <p className="mt-4 font-display text-lg font-bold">Tu carrito está vacío</p>
       <p className="mt-1 max-w-xs text-sm text-gray-500">Agrega tus accesorios favoritos y aquí armamos tu mensaje para WhatsApp.</p>
       <Button className="mt-6" onClick={onBrowse}>
         Ver productos

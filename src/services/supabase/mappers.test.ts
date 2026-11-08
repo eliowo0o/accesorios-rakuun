@@ -10,6 +10,7 @@ import {
   normalizeSearch,
   toCategoryRef,
   toSearchPattern,
+  withReachableParents,
   type CategoryRecord,
   type ProductRecord,
 } from "./mappers";
@@ -99,6 +100,17 @@ describe("categorías", () => {
     expect(toCategoryRef("a1", byId)).toEqual({ id: "a1", name: "Perlas", slug: "slug-a1", parentSlug: "slug-a" });
     expect(toCategoryRef("a", byId)?.parentSlug).toBeNull();
     expect(toCategoryRef("nope", byId)).toBeNull();
+  });
+
+  it("toCategoryRef devuelve null si el padre no está (oculto)", () => {
+    const byId = new Map(categories.filter((c) => c.id !== "a").map((c) => [c.id, c]));
+    expect(toCategoryRef("a1", byId)).toBeNull();
+    expect(toCategoryRef("b1", byId)?.parentSlug).toBe("slug-b");
+  });
+
+  it("withReachableParents quita subcategorías de padres ocultos", () => {
+    const visible = categories.filter((c) => c.id !== "a");
+    expect(withReachableParents(visible).map((c) => c.id)).toEqual(["b", "b1"]);
   });
 });
 

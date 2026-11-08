@@ -2,6 +2,7 @@ import type { CartItem, CheckoutForm, StoreSettings } from "@/types";
 import { formatPricePlain } from "@/lib/format";
 import { routes } from "@/lib/site";
 import { formatMxPhone, normalizeMxPhone } from "@/lib/checkout-schema";
+import { selectTotal } from "@/reducers/cartReducer";
 
 /**
  * Armado del mensaje de WhatsApp (funciones puras). No hay integración con la API de WhatsApp:
@@ -30,8 +31,7 @@ function itemLines(items: CartItem[], siteUrl: string, withLinks: boolean): stri
 }
 
 function totalLine(items: CartItem[]): string {
-  const total = Math.round(items.reduce((n, i) => n + i.price * i.quantity, 0) * 100) / 100;
-  return `Total: ${formatPricePlain(total)} MXN`;
+  return `Total: ${formatPricePlain(selectTotal(items))} MXN`;
 }
 
 /** Une bloques con línea en blanco y omite líneas/bloques vacíos. */

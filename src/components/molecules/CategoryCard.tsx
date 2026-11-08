@@ -11,7 +11,7 @@ interface CategoryCardProps {
   active?: boolean;
 }
 
-/** Tarjeta de categoría con conteo de productos (panel "Todas" y listados). */
+/** Tarjeta de categoría con conteo de productos (panel "Categorías" y listados). */
 export function CategoryCard({ href, name, count, imageUrl, active }: CategoryCardProps) {
   return (
     <Link

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, Trash2 } from "lucide-react";
-import { IconButton, Price } from "@/components/atoms";
+import { IconButton } from "@/components/atoms/IconButton";
+import { Price } from "@/components/atoms/Price";
 import { QuantityStepper } from "@/components/molecules/QuantityStepper";
 import { MAX_QUANTITY, MIN_QUANTITY } from "@/reducers/cartReducer";
 import { routes } from "@/lib/site";
@@ -48,7 +49,7 @@ export function CartLine({ item, onDecrement, onIncrement, onRemove, onNavigate 
           onDecrement={onDecrement}
           onIncrement={onIncrement}
         />
-        <IconButton label={`Quitar ${item.name} del pedido`} onClick={onRemove} className="text-gray-500 hover:text-danger">
+        <IconButton label={`Quitar ${item.name} del carrito`} onClick={onRemove} className="text-gray-500 hover:text-danger">
           <Trash2 className="size-4" aria-hidden />
         </IconButton>
       </div>

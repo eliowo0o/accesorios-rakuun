@@ -36,6 +36,9 @@ export type CartAction =
   | { type: "ADD"; item: Omit<CartItem, "quantity">; quantity?: number }
   | { type: "REMOVE"; productId: UUID }
   | { type: "SET_QUANTITY"; productId: UUID; quantity: number }
+  /** +1 / −1 sobre la cantidad actual (sin pasar de los límites). */
+  | { type: "INCREMENT"; productId: UUID }
+  | { type: "DECREMENT"; productId: UUID }
   | { type: "CLEAR" }
   /**
    * Carga lo guardado. La primera vez (hydrated=false) se mezcla con lo que haya en memoria
@@ -142,6 +145,13 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
       const existing = state.items.find((i) => i.productId === action.productId);
       if (!existing || existing.quantity === quantity) return state;
       return { ...state, items: state.items.map((i) => (i.productId === action.productId ? { ...i, quantity } : i)) };
+    }
+    case "INCREMENT":
+    case "DECREMENT": {
+      const existing = state.items.find((i) => i.productId === action.productId);
+      if (!existing) return state;
+      const delta = action.type === "INCREMENT" ? 1 : -1;
+      return cartReducer(state, { type: "SET_QUANTITY", productId: action.productId, quantity: existing.quantity + delta });
     }
     case "CLEAR":
       return state.items.length === 0 && state.notices.length === 0 ? state : { ...state, items: [], notices: [] };

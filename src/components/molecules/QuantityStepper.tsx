@@ -1,5 +1,5 @@
 import { Minus, Plus } from "lucide-react";
-import { IconButton } from "@/components/atoms";
+import { IconButton } from "@/components/atoms/IconButton";
 import { cn } from "@/lib/cn";
 
 export interface QuantityStepperProps {

@@ -16,6 +16,10 @@ export interface CartApi {
   add: (item: Omit<CartItem, "quantity">, quantity?: number) => void;
   remove: (productId: UUID) => void;
   setQuantity: (productId: UUID, quantity: number) => void;
+  /** Suma 1 a la cantidad (hasta el máximo). */
+  increment: (productId: UUID) => void;
+  /** Resta 1 a la cantidad (mínimo 1; para quitar, `remove`). */
+  decrement: (productId: UUID) => void;
   clear: () => void;
   isOpen: boolean;
   open: () => void;
@@ -31,4 +35,4 @@ export interface CartApi {
 export type CartStateValue = Pick<CartApi, "items" | "count" | "total" | "isOpen" | "hydrated" | "notices">;
 
 /** Acciones del carrito (referencias estables: no provocan renders). */
-export type CartActions = Pick<CartApi, "add" | "remove" | "setQuantity" | "clear" | "open" | "close" | "dismissNotices">;
+export type CartActions = Pick<CartApi, "add" | "remove" | "setQuantity" | "increment" | "decrement" | "clear" | "open" | "close" | "dismissNotices">;

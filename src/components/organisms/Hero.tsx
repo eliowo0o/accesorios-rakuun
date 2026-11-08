@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
+import { buttonClass } from "@/components/atoms/Button";
 import type { StoreSettings } from "@/types";
 
 interface HeroProps {
@@ -24,8 +25,9 @@ export function Hero({ settings, targetId }: HeroProps) {
       ) : (
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-br from-brand-olive via-brand-sage to-brand-mauve" />
       )}
-      {/* Velo para asegurar contraste del texto sobre la foto. */}
-      <div aria-hidden className="absolute inset-0 -z-10 bg-black/40" />
+      {/* Velo para asegurar contraste ≥4.5:1 del texto blanco aun sobre zonas claras de la foto
+          (≥55% de negro detrás del texto). */}
+      <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-black/45 via-black/60 to-black/55" />
 
       <div className="mx-auto flex min-h-[22rem] max-w-6xl flex-col items-center justify-center px-4 py-12 text-center text-white sm:min-h-[26rem]">
         {settings.logoUrl ? (
@@ -43,7 +45,10 @@ export function Hero({ settings, targetId }: HeroProps) {
         <p className="mt-1 text-lg font-medium text-white/95 drop-shadow">{settings.tagline}</p>
         <a
           href={`#${targetId}`}
-          className="mt-6 inline-flex h-12 items-center gap-2 rounded-full bg-white px-6 font-display text-base font-bold text-ink shadow-md transition-colors duration-200 hover:bg-primary-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className={buttonClass({
+            variant: "light",
+            className: "mt-6 h-12 px-6 text-base font-bold shadow-md hover:bg-primary-soft focus-visible:outline-white",
+          })}
         >
           Ver productos
           <ArrowDown aria-hidden className="size-5" />

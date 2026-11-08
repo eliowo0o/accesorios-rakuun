@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ADDED_FEEDBACK_MS, clampQuantity, MAX_QUANTITY, useAddToCart } from "./useAddToCart";
+import { ADDED_FEEDBACK_MS, useAddToCart } from "./useAddToCart";
 
 const add = vi.fn();
-vi.mock("@/hooks/useCart", () => ({ useCart: () => ({ add }) }));
+vi.mock("@/hooks/useCart", () => ({ useCartActions: () => ({ add }) }));
 
 const item = { productId: "p1", slug: "collar", name: "Collar", price: 60, imageUrl: null };
 
@@ -13,13 +13,6 @@ describe("useAddToCart", () => {
     add.mockClear();
   });
   afterEach(() => vi.useRealTimers());
-
-  it("clampQuantity mantiene la cantidad entre 1 y el máximo", () => {
-    expect(clampQuantity(0)).toBe(1);
-    expect(clampQuantity(2.7)).toBe(2);
-    expect(clampQuantity(500)).toBe(MAX_QUANTITY);
-    expect(clampQuantity(Number.NaN)).toBe(1);
-  });
 
   it("agrega con la cantidad elegida, reinicia la cantidad y muestra 'Agregado' un momento", () => {
     const { result } = renderHook(() => useAddToCart(item));
