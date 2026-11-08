@@ -48,6 +48,7 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
               alt={img.alt || productName}
               fill
               preload={index === 0}
+              loading={index === 0 ? "eager" : "lazy"}
               sizes="(min-width: 1024px) 560px, (min-width: 768px) 50vw, 100vw"
               className="object-cover"
             />

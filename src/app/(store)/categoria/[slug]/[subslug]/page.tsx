@@ -15,6 +15,12 @@ import { categoryBreadcrumbs } from "../../../_lib/catalog";
 
 const EMPTY_PLACEHOLDER = { slug: "sin-categorias", subslug: "sin-subcategorias" };
 
+/**
+ * Navegación bloqueante a propósito (SEO): el HTML llega completo y un slug inexistente
+ * responde 404 real en vez de un shell 200. Las rutas conocidas ya están prerenderizadas.
+ */
+export const instant = false;
+
 export async function generateStaticParams() {
   const tree = await getCategoryTree();
   const params = tree.flatMap((root) => root.children.map((child) => ({ slug: root.slug, subslug: child.slug })));

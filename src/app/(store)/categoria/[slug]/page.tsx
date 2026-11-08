@@ -15,6 +15,12 @@ import { categoryBreadcrumbs, findParentOf, labelWithinRoot } from "../../_lib/c
 /** Con Cache Components hay que devolver al menos un parámetro; el placeholder termina en 404. */
 const EMPTY_PLACEHOLDER = "sin-categorias";
 
+/**
+ * Navegación bloqueante a propósito (SEO): el HTML llega completo y un slug inexistente
+ * responde 404 real en vez de un shell 200. Las rutas conocidas ya están prerenderizadas.
+ */
+export const instant = false;
+
 export async function generateStaticParams() {
   const tree = await getCategoryTree();
   return tree.length ? tree.map((c) => ({ slug: c.slug })) : [{ slug: EMPTY_PLACEHOLDER }];

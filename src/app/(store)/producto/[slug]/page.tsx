@@ -20,6 +20,12 @@ import {
 
 const EMPTY_PLACEHOLDER = "sin-productos";
 
+/**
+ * Navegación bloqueante a propósito (SEO): el HTML llega completo y un slug inexistente
+ * responde 404 real en vez de un shell 200. Las rutas conocidas ya están prerenderizadas.
+ */
+export const instant = false;
+
 export async function generateStaticParams() {
   const products = await getAllProducts();
   return products.length ? products.map((p) => ({ slug: p.slug })) : [{ slug: EMPTY_PLACEHOLDER }];

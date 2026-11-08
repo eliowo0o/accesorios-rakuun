@@ -7,7 +7,7 @@ interface ProductGridProps {
   products: Product[];
   /** Devuelve la etiqueta de categoría de cada tarjeta. */
   labelFor?: (product: Product) => string | null;
-  /** "first": precarga la foto de la primera tarjeta (solo si es el LCP de la página). */
+  /** "first": precarga la foto de la primera tarjeta (solo si es el LCP de la página). La primera fila siempre carga eager. */
   preload?: "first" | "none";
   /** Qué mostrar si no hay productos. */
   empty?: ReactNode;
@@ -20,6 +20,9 @@ const GRID = {
   wide: "sm:grid-cols-2 lg:grid-cols-3 sm:gap-5",
   compact: "grid-cols-2 lg:grid-cols-4",
 } as const;
+
+/** Tarjetas de la primera fila en escritorio (3 columnas): arriba del pliegue. */
+const EAGER_COUNT = 3;
 
 const SIZES = {
   wide: "(min-width: 1024px) 352px, (min-width: 640px) 50vw, 100vw",
@@ -43,7 +46,7 @@ export function ProductGrid({
           <ProductCard
             product={product}
             categoryLabel={labelFor?.(product) ?? null}
-            preload={preload === "first" && index === 0}
+            imagePriority={preload === "first" && index === 0 ? "preload" : index < EAGER_COUNT ? "eager" : "lazy"}
             sizes={SIZES[variant]}
             headingLevel={headingLevel}
             variant={variant}

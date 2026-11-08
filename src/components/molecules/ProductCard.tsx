@@ -12,8 +12,11 @@ interface ProductCardProps {
   product: Product;
   /** Nombre de la categoría que se muestra arriba del nombre (p. ej. "Collares"). */
   categoryLabel?: string | null;
-  /** Solo la primera tarjeta visible de la página (LCP). */
-  preload?: boolean;
+  /**
+   * Carga de la foto: "preload" solo para la tarjeta que es el LCP de la página,
+   * "eager" para las de la primera fila (arriba del pliegue), "lazy" para el resto.
+   */
+  imagePriority?: "preload" | "eager" | "lazy";
   /** `sizes` de la imagen según la rejilla donde vive la tarjeta. */
   sizes?: string;
   /** Nivel del encabezado del nombre (h2 en listados de página, h3 bajo una sección). */
@@ -29,7 +32,7 @@ interface ProductCardProps {
 export function ProductCard({
   product,
   categoryLabel,
-  preload = false,
+  imagePriority = "lazy",
   sizes = "(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw",
   headingLevel: Heading = "h2",
   variant = "wide",
@@ -51,7 +54,8 @@ export function ProductCard({
           alt={cover.alt || product.name}
           fill
           sizes={sizes}
-          preload={preload}
+          preload={imagePriority === "preload"}
+          loading={imagePriority === "lazy" ? "lazy" : "eager"}
           className="-z-10 object-cover transition-transform duration-300 group-hover:scale-[1.03]"
         />
       ) : (
