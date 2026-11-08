@@ -9,6 +9,7 @@ import { useConfirmAction } from "./useConfirmAction";
 import { useImageUpload } from "./useImageUpload";
 import { useListEditor } from "./useListEditor";
 import { useSlugField } from "./useSlugField";
+import { useDirtyTracker, useUnsavedChangesGuard } from "./useUnsavedChangesGuard";
 
 export interface ImageDraft {
   key: string;
@@ -25,13 +26,20 @@ export function useProductForm(product: AdminProduct | null) {
   const { add } = images;
 
   const onUploaded = useCallback((url: string) => add({ key: crypto.randomUUID(), url, alt: "" }), [add]);
-  const uploader = useImageUpload({ folder: "products", onUploaded });
-
-  const form = useAdminForm(saveProduct);
-  const remover = useConfirmAction(deleteProduct);
+  const uploader = useImageUpload({
+    folder: "products",
+    onUploaded,
+    limit: { max: MAX_PRODUCT_IMAGES, current: images.items.length },
+  });
 
   const imagesJson = JSON.stringify(images.items.map(({ url, alt }) => ({ url, alt })));
   const canAddImages = images.items.length < MAX_PRODUCT_IMAGES;
+
+  const dirty = useDirtyTracker(imagesJson);
+  useUnsavedChangesGuard(dirty.isDirty);
+
+  const form = useAdminForm(saveProduct, { onSuccess: dirty.markSaved });
+  const remover = useConfirmAction(deleteProduct);
 
   const setAlt = (index: number, alt: string) => images.update(index, { ...images.items[index], alt });
 
@@ -48,6 +56,7 @@ export function useProductForm(product: AdminProduct | null) {
     canAddImages,
     uploader,
     form,
+    onFormChange: dirty.onChange,
     onDelete,
     deleting: remover.pending,
     deleteError: remover.error,

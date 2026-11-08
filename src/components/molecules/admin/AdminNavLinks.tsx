@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FolderTree, LayoutDashboard, Package, Settings } from "lucide-react";
-import { chipClass } from "@/components/atoms";
+import { chipClass } from "@/components/atoms/Chip";
+import { cn } from "@/lib/cn";
 import { ADMIN_ROUTES } from "@/services/admin/config";
 
 const LINKS = [
@@ -19,7 +20,7 @@ export function AdminNavLinks({ isActive }: { isActive?: (href: string) => boole
           const active = isActive?.(href) ?? false;
           return (
             <li key={href}>
-              <Link href={href} aria-current={active ? "page" : undefined} className={chipClass(active)}>
+              <Link href={href} aria-current={active ? "page" : undefined} className={cn(chipClass(active), "min-h-11")}>
                 <Icon aria-hidden className="size-4" />
                 {label}
               </Link>

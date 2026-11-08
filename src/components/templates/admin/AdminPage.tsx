@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronLeft } from "lucide-react";
-import { Skeleton } from "@/components/atoms";
+import { Skeleton } from "@/components/atoms/Skeleton";
 
 /**
  * Plantilla de cada pantalla del admin.
@@ -24,7 +24,7 @@ export function AdminPage({
     <div className="flex flex-col gap-5">
       <div className="flex flex-col gap-3">
         {back && (
-          <Link href={back.href} className="inline-flex w-fit items-center gap-1 text-sm font-medium text-muted hover:text-ink">
+          <Link href={back.href} className="-ml-1 inline-flex min-h-11 w-fit items-center gap-1 px-1 text-sm font-medium text-muted hover:text-ink">
             <ChevronLeft aria-hidden className="size-4" />
             {back.label}
           </Link>

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { EyeOff, FolderTree, PackageX, Package, Plus, Settings, Star } from "lucide-react";
 import { StatCard } from "@/components/molecules/admin/StatCard";
-import { buttonClassFor } from "./buttonLink";
+import { buttonClass } from "@/components/atoms/Button";
 import { ADMIN_ROUTES } from "@/services/admin/config";
 import type { AdminSummary } from "@/services/admin/types";
 
@@ -26,15 +26,15 @@ export function SummaryGrid({ summary }: { summary: AdminSummary }) {
           Accesos rápidos
         </h2>
         <div className="flex flex-wrap gap-2">
-          <Link href={ADMIN_ROUTES.newProduct} className={buttonClassFor("primary")}>
+          <Link href={ADMIN_ROUTES.newProduct} className={buttonClass()}>
             <Plus aria-hidden className="size-4" />
             Nuevo producto
           </Link>
-          <Link href={ADMIN_ROUTES.categories} className={buttonClassFor("outline")}>
+          <Link href={ADMIN_ROUTES.categories} className={buttonClass({ variant: "outline" })}>
             <FolderTree aria-hidden className="size-4" />
             Categorías
           </Link>
-          <Link href={ADMIN_ROUTES.settings} className={buttonClassFor("outline")}>
+          <Link href={ADMIN_ROUTES.settings} className={buttonClass({ variant: "outline" })}>
             <Settings aria-hidden className="size-4" />
             Ajustes de tienda
           </Link>

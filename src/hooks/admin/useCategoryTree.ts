@@ -1,38 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useReducer, useTransition } from "react";
 import { deleteCategory } from "@/services/admin/actions/categories";
 import type { AdminCategory } from "@/services/admin/types";
-import { useConfirmAction } from "./useConfirmAction";
+import { categoryTreeReducer, initialCategoryTreeState } from "./categoryTreeReducer";
 
-export type CategoryEditor =
-  | { mode: "create"; parentId: string | null }
-  | { mode: "edit"; id: string }
-  | null;
+/**
+ * Estado del árbol (qué formulario está abierto + borrar con confirmación) con useReducer.
+ * Lo consume CategoryTreeProvider; las filas lo leen por contexto.
+ */
+export function useCategoryTree(roots: AdminCategory[]) {
+  const [state, dispatch] = useReducer(categoryTreeReducer, initialCategoryTreeState);
+  const [, startTransition] = useTransition();
 
-/** Qué formulario está abierto en el árbol (crear raíz/sub, o editar uno) + borrar con confirmación. */
-export function useCategoryTree() {
-  const [editor, setEditor] = useState<CategoryEditor>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const remover = useConfirmAction(deleteCategory);
-
-  const onDelete = (category: AdminCategory) => {
-    setDeletingId(category.id);
-    remover.run(`¿Borrar «${category.name}»? No se puede deshacer.`, category.id);
-  };
-
-  return {
-    editor,
-    openCreate: (parentId: string | null) => setEditor({ mode: "create", parentId }),
-    openEdit: (id: string) => setEditor({ mode: "edit", id }),
-    close: () => setEditor(null),
-    isEditing: (id: string) => editor?.mode === "edit" && editor.id === id,
-    isCreatingUnder: (parentId: string | null) => editor?.mode === "create" && editor.parentId === parentId,
-    onDelete,
-    deleteError: remover.error,
-    deletingId: remover.pending ? deletingId : null,
-    errorFor: (id: string) => (deletingId === id ? remover.error : null),
-  };
+  return useMemo(() => {
+    const { editor, deletingId, deletePending, deleteError } = state;
+    return {
+      state: {
+        isEditing: (id: string) => editor?.mode === "edit" && editor.id === id,
+        isCreatingUnder: (parentId: string | null) => editor?.mode === "create" && editor.parentId === parentId,
+        isDeleting: (id: string) => deletePending && deletingId === id,
+        errorFor: (id: string) => (deletingId === id ? deleteError : null),
+      },
+      actions: {
+        openCreate: (parentId: string | null) => dispatch({ type: "openCreate", parentId }),
+        openEdit: (id: string) => dispatch({ type: "openEdit", id }),
+        close: () => dispatch({ type: "close" }),
+        remove: (category: AdminCategory) => {
+          if (!window.confirm(`¿Borrar «${category.name}»? No se puede deshacer.`)) return;
+          dispatch({ type: "deleteStart", id: category.id });
+          startTransition(async () => {
+            const result = await deleteCategory(category.id);
+            dispatch({ type: "deleteDone", error: result.ok ? null : result.error });
+          });
+        },
+      },
+      meta: { roots },
+    };
+  }, [state, roots]);
 }
 
-export type CategoryTreeController = ReturnType<typeof useCategoryTree>;
+export type CategoryTreeContextValue = ReturnType<typeof useCategoryTree>;

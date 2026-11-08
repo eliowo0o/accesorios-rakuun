@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useReducer, useState } from "react";
+import { useCallback, useReducer, useState, type KeyboardEvent } from "react";
 import { listReducer, type ListAction } from "./listEditorReducer";
 
 /** Lista ordenable genérica: agregar, editar, quitar, subir/bajar. */
@@ -29,7 +29,14 @@ export function useStringListEditor(initial: string[]) {
     setDraft("");
   };
 
-  return { ...list, draft, setDraft, addDraft };
+  /** Enter en el campo "nuevo" agrega (y no envía el formulario). */
+  const onDraftKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return;
+    event.preventDefault();
+    addDraft();
+  };
+
+  return { ...list, draft, setDraft, addDraft, onDraftKeyDown };
 }
 
 export type StringListController = ReturnType<typeof useStringListEditor>;
