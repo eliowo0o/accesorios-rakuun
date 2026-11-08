@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+/*
+ * Tokens de RAKUUN. Fuente: Obsidian "RAKUUN - Identidad visual" (muestreados de capturas,
+ * pendientes de ajustar con el logo original). Tienda solo en modo claro por ahora.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #1b1f24;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Marca */
+  --color-brand-sage: #b4b886;
+  --color-brand-plum: #24104a;
+  --color-brand-mauve: #927892;
+  --color-brand-olive: #7e8432;
+  --color-brand-olive-dark: #5f6024;
+  --color-brand-ochre: #c9a04e;
+  --color-brand-cream: #ede8dc;
+
+  /* UI */
+  --color-primary: #48780c;
+  --color-primary-hover: #3b6309;
+  --color-primary-soft: #f0fce4;
+  --color-primary-soft-hover: #e2f5cf;
+  --color-ink: #1b1f24;
+  --color-muted: #6b7280;
+  --color-line: #e5e7eb;
+  --color-danger: #b42318;
+  --color-whatsapp: #1dbf73;
+  --color-whatsapp-hover: #17a362;
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-poppins);
+
+  --radius-card: 1.25rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
