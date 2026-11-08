@@ -27,21 +27,26 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export function Button({ ref, variant = "primary", size = "md", fullWidth, className, type = "button", ...props }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
-  return (
-    <button
-      ref={ref}
-      type={type}
-      className={cn(
-        "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full font-display font-semibold transition-colors duration-200",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
-        "disabled:cursor-not-allowed disabled:opacity-50",
-        variants[variant],
-        sizes[size],
-        fullWidth && "w-full",
-        className,
-      )}
-      {...props}
-    />
+export interface ButtonStyleOptions {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  fullWidth?: boolean;
+  className?: string;
+}
+
+/** Clases del botón; úsalo también en <Link> para que se vea como botón sin duplicar estilos. */
+export function buttonClass({ variant = "primary", size = "md", fullWidth, className }: ButtonStyleOptions = {}) {
+  return cn(
+    "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full font-display font-semibold transition-colors duration-200",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+    "disabled:cursor-not-allowed disabled:opacity-50",
+    variants[variant],
+    sizes[size],
+    fullWidth && "w-full",
+    className,
   );
+}
+
+export function Button({ ref, variant, size, fullWidth, className, type = "button", ...props }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
+  return <button ref={ref} type={type} className={buttonClass({ variant, size, fullWidth, className })} {...props} />;
 }
