@@ -44,3 +44,6 @@ next-env.d.ts
 # claude
 .claude/settings.local.json
 .claude/worktrees/
+
+# subidas locales del admin en modo desarrollo (sin AWS)
+/public/uploads-dev/
