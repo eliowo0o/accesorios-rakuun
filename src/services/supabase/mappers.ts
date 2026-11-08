@@ -125,14 +125,26 @@ export function buildCategoryTree(
     }));
 }
 
+/**
+ * Quita las subcategorías cuyo padre no está en la lista (oculto): sin padre
+ * visible no tienen URL `/categoria/padre/hija` y generarían links 404.
+ */
+export function withReachableParents(categories: CategoryRecord[]): CategoryRecord[] {
+  const ids = new Set(categories.map((c) => c.id));
+  return categories.filter((c) => c.parent_id === null || ids.has(c.parent_id));
+}
+
+/** null si la categoría no está en el mapa o si su padre no lo está (padre oculto). */
 export function toCategoryRef(
   categoryId: string,
   categoriesById: Map<string, CategoryRecord>,
 ): CategoryRef | null {
   const cat = categoriesById.get(categoryId);
   if (!cat) return null;
-  const parent = cat.parent_id ? categoriesById.get(cat.parent_id) : undefined;
-  return { id: cat.id, name: cat.name, slug: cat.slug, parentSlug: parent?.slug ?? null };
+  if (cat.parent_id === null) return { id: cat.id, name: cat.name, slug: cat.slug, parentSlug: null };
+  const parent = categoriesById.get(cat.parent_id);
+  if (!parent) return null;
+  return { id: cat.id, name: cat.name, slug: cat.slug, parentSlug: parent.slug };
 }
 
 export function mapProductImage(row: Pick<ProductImageRow, "id" | "url" | "alt" | "sort_order">): ProductImage {

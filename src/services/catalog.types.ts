@@ -12,6 +12,8 @@ export interface CatalogRepository {
   /** Productos de una categoría; si es raíz incluye los de sus subcategorías. Sin duplicados. */
   getProductsByCategory(categoryId: string): Promise<Product[]>;
   getAllProducts(): Promise<Product[]>;
+  /** Cantidad de productos visibles (sin traerlos). */
+  getProductCount(): Promise<number>;
   getFeaturedProducts(): Promise<Product[]>;
   getProductBySlug(slug: string): Promise<Product | null>;
   /** Por productos visibles cuyo nombre o descripción contiene el texto (sin acentos/mayúsculas). */

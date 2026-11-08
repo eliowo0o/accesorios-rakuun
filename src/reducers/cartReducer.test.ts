@@ -108,6 +108,26 @@ describe("SET_QUANTITY", () => {
   });
 });
 
+describe("INCREMENT / DECREMENT", () => {
+  it("suma y resta 1 dentro de 1..99", () => {
+    const base = withItems({ ...collar, quantity: 2 });
+    expect(cartReducer(base, { type: "INCREMENT", productId: "p1" }).items[0].quantity).toBe(3);
+    expect(cartReducer(base, { type: "DECREMENT", productId: "p1" }).items[0].quantity).toBe(1);
+  });
+
+  it("no baja de 1 ni sube de 99, y no cambia el estado en los límites", () => {
+    const min = withItems({ ...collar, quantity: 1 });
+    expect(cartReducer(min, { type: "DECREMENT", productId: "p1" })).toBe(min);
+    const max = withItems({ ...collar, quantity: MAX_QUANTITY });
+    expect(cartReducer(max, { type: "INCREMENT", productId: "p1" })).toBe(max);
+  });
+
+  it("ignora productos inexistentes", () => {
+    const base = withItems({ ...collar, quantity: 2 });
+    expect(cartReducer(base, { type: "INCREMENT", productId: "x" })).toBe(base);
+  });
+});
+
 describe("CLEAR", () => {
   it("vacía líneas y avisos", () => {
     const s = cartReducer(

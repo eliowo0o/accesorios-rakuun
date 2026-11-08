@@ -40,8 +40,8 @@ export function CartSheet({ settings }: { settings: StoreSettings }) {
                 <CartLine
                   key={item.productId}
                   item={item}
-                  onDecrement={() => cart.setQuantity(item.productId, item.quantity - 1)}
-                  onIncrement={() => cart.setQuantity(item.productId, item.quantity + 1)}
+                  onDecrement={() => cart.decrement(item.productId)}
+                  onIncrement={() => cart.increment(item.productId)}
                   onRemove={() => cart.remove(item.productId)}
                   onNavigate={cart.close}
                 />

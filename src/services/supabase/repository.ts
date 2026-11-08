@@ -11,6 +11,7 @@ import {
   toSearchPattern,
   type CategoryRecord,
   type ProductCategoryLink,
+  withReachableParents,
   type ProductRecord,
 } from "./mappers";
 
@@ -41,7 +42,8 @@ export function createSupabaseCatalogRepository(db: PublicSupabaseClient): Catal
       .eq("is_visible", true)
       .order("sort_order");
     if (error) fail("categorías", error);
-    return data ?? [];
+    // Una subcategoría visible con padre oculto tampoco se muestra.
+    return withReachableParents(data ?? []);
   }
 
   /** Vínculos producto-categoría solo de productos visibles (para los conteos). */
@@ -107,6 +109,15 @@ export function createSupabaseCatalogRepository(db: PublicSupabaseClient): Catal
     async getAllProducts() {
       const [categories, rows] = await Promise.all([loadCategories(), run("productos", productsQuery())]);
       return mapProducts(rows, categories);
+    },
+
+    async getProductCount() {
+      const { count, error } = await db
+        .from("products")
+        .select("id", { count: "exact", head: true })
+        .eq("is_visible", true);
+      if (error) fail("conteo de productos", error);
+      return count ?? 0;
     },
 
     async getFeaturedProducts() {

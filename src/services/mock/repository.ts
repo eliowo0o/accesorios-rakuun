@@ -5,13 +5,18 @@ import { mockCategories, mockProducts, mockSettings, type MockProduct } from "./
 const normalize = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
-const visibleCategories = () => mockCategories.filter((c) => c.isVisible);
+/** Visibles y, si son subcategorías, con padre visible (una hija de un padre oculto no tiene URL). */
+const visibleCategories = () => {
+  const visibleIds = new Set(mockCategories.filter((c) => c.isVisible).map((c) => c.id));
+  return mockCategories.filter((c) => c.isVisible && (c.parentId === null || visibleIds.has(c.parentId)));
+};
 const visibleProducts = () => mockProducts.filter((p) => p.isVisible);
 
 function toCategoryRef(id: string): CategoryRef | null {
-  const cat = mockCategories.find((c) => c.id === id);
+  const cats = visibleCategories();
+  const cat = cats.find((c) => c.id === id);
   if (!cat) return null;
-  const parent = cat.parentId ? mockCategories.find((c) => c.id === cat.parentId) : null;
+  const parent = cat.parentId ? cats.find((c) => c.id === cat.parentId) : null;
   return { id: cat.id, name: cat.name, slug: cat.slug, parentSlug: parent?.slug ?? null };
 }
 
@@ -33,9 +38,11 @@ function toProduct(p: MockProduct): Product {
   };
 }
 
-/** ids de la categoría + sus hijas */
+/** ids de la categoría + sus hijas visibles; vacío si la categoría no es visible. */
 function categoryScope(categoryId: string): Set<string> {
-  return new Set([categoryId, ...mockCategories.filter((c) => c.parentId === categoryId).map((c) => c.id)]);
+  const cats = visibleCategories();
+  if (!cats.some((c) => c.id === categoryId)) return new Set();
+  return new Set([categoryId, ...cats.filter((c) => c.parentId === categoryId).map((c) => c.id)]);
 }
 
 function countFor(categoryId: string): number {
@@ -81,6 +88,10 @@ export const mockRepository: CatalogRepository = {
 
   async getAllProducts() {
     return visibleProducts().map(toProduct).sort(compareProducts);
+  },
+
+  async getProductCount() {
+    return visibleProducts().length;
   },
 
   async getFeaturedProducts() {

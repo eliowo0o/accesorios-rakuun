@@ -56,6 +56,14 @@ export async function getAllProducts() {
   return repo().getAllProducts();
 }
 
+/** Cantidad de productos visibles; mismos tags que getAllProducts. */
+export async function getProductCount() {
+  "use cache";
+  cacheLife("max");
+  cacheTag(CACHE_TAGS.products, CACHE_TAGS.categories);
+  return repo().getProductCount();
+}
+
 export async function getFeaturedProducts() {
   "use cache";
   cacheLife("max");

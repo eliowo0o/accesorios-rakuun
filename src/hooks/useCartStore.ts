@@ -22,6 +22,8 @@ export function useCartStore(): { state: CartStateValue; actions: CartActions } 
       add: (item, quantity) => dispatch({ type: "ADD", item, quantity }),
       remove: (productId) => dispatch({ type: "REMOVE", productId }),
       setQuantity: (productId, quantity) => dispatch({ type: "SET_QUANTITY", productId, quantity }),
+      increment: (productId) => dispatch({ type: "INCREMENT", productId }),
+      decrement: (productId) => dispatch({ type: "DECREMENT", productId }),
       clear: () => dispatch({ type: "CLEAR" }),
       open: () => dispatch({ type: "OPEN" }),
       close: () => dispatch({ type: "CLOSE" }),
