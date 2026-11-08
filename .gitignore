@@ -43,3 +43,6 @@ next-env.d.ts
 
 # claude
 .claude/settings.local.json
+
+# subidas locales del admin en modo desarrollo (sin AWS)
+/public/uploads-dev/
