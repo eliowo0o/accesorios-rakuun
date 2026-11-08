@@ -2,6 +2,8 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import type { CatalogRepository } from "./catalog.types";
 import { mockRepository } from "./mock/repository";
+import { hasSupabaseEnv } from "@/lib/supabase/public";
+import { getSupabaseRepository } from "./supabase/repository";
 
 /**
  * Lecturas públicas del catálogo, cacheadas.
@@ -14,9 +16,9 @@ export const CACHE_TAGS = {
   products: "products",
 } as const;
 
-/** El agente Datos cambia esto para usar Supabase cuando existan las env vars. */
+/** Supabase si existen NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY; si no, datos de prueba. */
 function repo(): CatalogRepository {
-  return mockRepository;
+  return hasSupabaseEnv() ? getSupabaseRepository() : mockRepository;
 }
 
 export async function getStoreSettings() {
