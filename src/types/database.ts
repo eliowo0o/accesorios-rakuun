@@ -182,6 +182,16 @@ export type Database = {
         Args: { input: string };
         Returns: string;
       };
+      /** Migración 0004: reemplaza product_images y product_categories en una transacción. */
+      save_product_relations: {
+        Args: {
+          p_product_id: string;
+          /** [{ url, alt }] en el orden final. */
+          p_images: Json;
+          p_category_ids: string[];
+        };
+        Returns: undefined;
+      };
     };
     Enums: { [_ in never]: never };
     CompositeTypes: { [_ in never]: never };

@@ -9,7 +9,8 @@ import type { AdminCategory, AdminProduct, CategoryData, ProductData, SettingsDa
 /**
  * Repositorio Supabase con la sesión del admin (rol `authenticated`, protegido por RLS).
  * Nunca usa service_role. Sin "use cache": el admin siempre ve datos frescos (incluye ocultos).
- * Nota: supabase-js no tiene transacciones; las escrituras multi-tabla se hacen en secuencia.
+ * Nota: supabase-js no tiene transacciones; imágenes + categorías se reemplazan con la función
+ * Postgres `save_product_relations` (una transacción). El insert/update del producto va aparte.
  */
 
 function fail(error: PostgrestError, context: string): never {
@@ -109,23 +110,14 @@ async function loadProducts(db: AdminSupabaseClient, onlyId?: string): Promise<A
   );
 }
 
+/** Reemplaza imágenes y categorías en una sola transacción (función `save_product_relations`, migración 0004). */
 async function replaceRelations(db: AdminSupabaseClient, productId: string, data: ProductData, fallbackAlt: string) {
-  const delImgs = await db.from("product_images").delete().eq("product_id", productId);
-  if (delImgs.error) fail(delImgs.error, "product_images.delete");
-  if (data.images.length) {
-    const ins = await db.from("product_images").insert(
-      data.images.map((img, index) => ({ product_id: productId, url: img.url, alt: img.alt || fallbackAlt, sort_order: index + 1 })),
-    );
-    if (ins.error) fail(ins.error, "product_images.insert");
-  }
-
-  const delLinks = await db.from("product_categories").delete().eq("product_id", productId);
-  if (delLinks.error) fail(delLinks.error, "product_categories.delete");
-  const categoryIds = [...new Set(data.categoryIds)];
-  if (categoryIds.length) {
-    const ins = await db.from("product_categories").insert(categoryIds.map((category_id) => ({ product_id: productId, category_id })));
-    if (ins.error) fail(ins.error, "product_categories.insert");
-  }
+  const { error } = await db.rpc("save_product_relations", {
+    p_product_id: productId,
+    p_images: data.images.map((img) => ({ url: img.url, alt: img.alt || fallbackAlt })),
+    p_category_ids: [...new Set(data.categoryIds)],
+  });
+  if (error) fail(error, "rpc.save_product_relations");
 }
 
 export function createSupabaseAdminRepository(): AdminRepository {

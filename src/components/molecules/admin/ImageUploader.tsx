@@ -1,5 +1,6 @@
+import type { ChangeEventHandler } from "react";
 import { ImagePlus, LoaderCircle, X } from "lucide-react";
-import { IconButton } from "@/components/atoms";
+import { IconButton } from "@/components/atoms/IconButton";
 import type { UploadItem } from "@/hooks/admin/imageUploadReducer";
 import { cn } from "@/lib/cn";
 
@@ -7,13 +8,14 @@ const ACCEPT = "image/jpeg,image/png,image/webp";
 
 /**
  * Botón para elegir imágenes + cola de subida con progreso. Sin lógica: recibe el estado
- * de useImageUpload. En celular abre la galería/cámara.
+ * y el handler `onInputChange` de useImageUpload. En celular abre la galería/cámara.
  */
 export function ImageUploader({
   id,
   label = "Subir imágenes",
   items,
-  onFiles,
+  notice,
+  onInputChange,
   onDismiss,
   multiple = true,
   disabled,
@@ -21,7 +23,9 @@ export function ImageUploader({
   id: string;
   label?: string;
   items: UploadItem[];
-  onFiles: (files: FileList | null) => void;
+  /** Aviso del último lote (p. ej. "Máximo 8 imágenes…"). */
+  notice?: string | null;
+  onInputChange: ChangeEventHandler<HTMLInputElement>;
   onDismiss: (id: string) => void;
   multiple?: boolean;
   disabled?: boolean;
@@ -39,20 +43,12 @@ export function ImageUploader({
       >
         <ImagePlus aria-hidden className="size-5" />
         {label}
-        <input
-          id={id}
-          type="file"
-          accept={ACCEPT}
-          multiple={multiple}
-          disabled={disabled}
-          className="sr-only"
-          onChange={(event) => {
-            onFiles(event.currentTarget.files);
-            event.currentTarget.value = "";
-          }}
-        />
+        <input id={id} type="file" accept={ACCEPT} multiple={multiple} disabled={disabled} className="sr-only" onChange={onInputChange} />
       </label>
       <p className="text-xs text-muted">JPG, PNG o WebP · máximo 5 MB cada una.</p>
+      <p role="status" className={cn("text-sm text-danger", !notice && "sr-only")}>
+        {notice}
+      </p>
 
       {items.length > 0 && (
         <ul className="flex flex-col gap-2" aria-live="polite">
@@ -77,7 +73,7 @@ export function ImageUploader({
                 )}
               </div>
               {item.status === "error" && (
-                <IconButton label={`Descartar ${item.name}`} onClick={() => onDismiss(item.id)} className="size-9">
+                <IconButton label={`Descartar ${item.name}`} onClick={() => onDismiss(item.id)} className="shrink-0">
                   <X aria-hidden className="size-4" />
                 </IconButton>
               )}

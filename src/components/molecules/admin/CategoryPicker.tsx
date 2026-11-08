@@ -25,7 +25,7 @@ export function CategoryPicker({
               {options.map((option) => (
                 <label
                   key={option.id}
-                  className="flex min-h-10 cursor-pointer items-center gap-2 rounded-full border border-line bg-white px-3 text-sm text-ink has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:checked]:text-primary"
+                  className="flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-line bg-white px-3 text-sm text-ink has-[:checked]:border-primary has-[:checked]:bg-primary-soft has-[:checked]:text-primary"
                 >
                   <input
                     type="checkbox"

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Trash2 } from "lucide-react";
-import { Button, Label } from "@/components/atoms";
-import type { UploadItem } from "@/hooks/admin/imageUploadReducer";
+import { Button } from "@/components/atoms/Button";
+import { Label } from "@/components/atoms/Label";
+import type { ImageUploadController } from "@/hooks/admin/useImageUpload";
 import { ImageUploader } from "./ImageUploader";
 
 /** Campo de una sola imagen (opcional) que viaja en el form como input oculto con la URL. */
@@ -11,9 +12,7 @@ export function SingleImageField({
   label,
   alt,
   url,
-  items,
-  onFiles,
-  onDismiss,
+  uploader,
   onClear,
   error,
 }: {
@@ -22,9 +21,7 @@ export function SingleImageField({
   label: string;
   alt: string;
   url: string | null;
-  items: UploadItem[];
-  onFiles: (files: FileList | null) => void;
-  onDismiss: (id: string) => void;
+  uploader: Pick<ImageUploadController, "items" | "notice" | "onInputChange" | "dismiss">;
   onClear: () => void;
   error?: string;
 }) {
@@ -37,7 +34,7 @@ export function SingleImageField({
           <div className="relative size-20 shrink-0 overflow-hidden rounded-2xl bg-gray-100">
             <Image src={url} alt={alt} fill sizes="80px" className="object-cover" />
           </div>
-          <Button variant="outline" size="sm" onClick={onClear}>
+          <Button variant="outline" onClick={onClear}>
             <Trash2 aria-hidden className="size-4" />
             Quitar imagen
           </Button>
@@ -47,9 +44,10 @@ export function SingleImageField({
         id={id}
         label={url ? "Cambiar imagen" : "Subir imagen"}
         multiple={false}
-        items={items}
-        onFiles={onFiles}
-        onDismiss={onDismiss}
+        items={uploader.items}
+        notice={uploader.notice}
+        onInputChange={uploader.onInputChange}
+        onDismiss={uploader.dismiss}
       />
       {error && <p role="alert" className="text-sm text-danger">{error}</p>}
     </div>
