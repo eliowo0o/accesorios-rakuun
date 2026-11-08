@@ -9,7 +9,7 @@ import { CatalogTemplate } from "@/components/templates/CatalogTemplate";
 import { pluralize } from "@/lib/format";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/site";
-import { getAllProducts, getCategoryTree, searchProducts } from "@/services/catalog";
+import { getCategoryTree, getProductCount, searchProducts } from "@/services/catalog";
 import { buildCategoryLookup, productCategoryLabel } from "../_lib/catalog";
 
 type SearchParams = PageProps<"/buscar">["searchParams"];
@@ -31,7 +31,7 @@ export async function generateMetadata({ searchParams }: PageProps<"/buscar">): 
 }
 
 export default async function SearchPage({ searchParams }: PageProps<"/buscar">) {
-  const [tree, all] = await Promise.all([getCategoryTree(), getAllProducts()]);
+  const [tree, totalCount] = await Promise.all([getCategoryTree(), getProductCount()]);
   return (
     <CatalogTemplate
       search={
@@ -41,7 +41,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/buscar">)
           ))}
         </Suspense>
       }
-      nav={<CategoryBar tree={tree} totalCount={all.length} activeSlug={null} />}
+      nav={<CategoryBar tree={tree} totalCount={totalCount} activeSlug={null} />}
       sectionLabel="Resultados de búsqueda"
     >
       <Suspense fallback={<ResultsSkeleton />}>

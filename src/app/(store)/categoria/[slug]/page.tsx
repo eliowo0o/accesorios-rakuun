@@ -9,7 +9,7 @@ import { ProductGrid } from "@/components/organisms/ProductGrid";
 import { CatalogTemplate } from "@/components/templates/CatalogTemplate";
 import { breadcrumbJsonLd, buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/site";
-import { getAllProducts, getCategoryBySlug, getCategoryTree, getProductsByCategory, getStoreSettings } from "@/services/catalog";
+import { getCategoryBySlug, getCategoryTree, getProductCount, getProductsByCategory, getStoreSettings } from "@/services/catalog";
 import { categoryBreadcrumbs, findParentOf, labelWithinRoot } from "../../_lib/catalog";
 
 /** Con Cache Components hay que devolver al menos un parámetro; el placeholder termina en 404. */
@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps<"/categoria/[slug]"
 
 export default async function CategoryPage({ params }: PageProps<"/categoria/[slug]">) {
   const { slug } = await params;
-  const [category, tree] = await Promise.all([getCategoryBySlug(slug), getCategoryTree()]);
+  const [category, tree, totalCount] = await Promise.all([getCategoryBySlug(slug), getCategoryTree(), getProductCount()]);
   if (!category) notFound();
 
   // Una subcategoría pedida como raíz: redirigir a su URL canónica.
@@ -49,7 +49,7 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
     permanentRedirect(routes.subcategory(parent.slug, category.slug));
   }
 
-  const [products, all] = await Promise.all([getProductsByCategory(category.id), getAllProducts()]);
+  const products = await getProductsByCategory(category.id);
   const children = tree.find((root) => root.id === category.id)?.children ?? [];
   const crumbs = categoryBreadcrumbs(category);
 
@@ -57,7 +57,7 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
     <>
       <JsonLd data={breadcrumbJsonLd(crumbs)} />
       <CatalogTemplate
-        nav={<CategoryBar tree={tree} totalCount={all.length} activeSlug={category.slug} />}
+        nav={<CategoryBar tree={tree} totalCount={totalCount} activeSlug={category.slug} />}
         header={
           <CategoryHeader
             title={category.name}
@@ -79,7 +79,7 @@ export default async function CategoryPage({ params }: PageProps<"/categoria/[sl
         <ProductGrid
           products={products}
           labelFor={(p) => labelWithinRoot(p, category)}
-          preloadFirst
+          preload="first"
           empty={<EmptyState title={`Aún no hay productos en ${category.name}`}>Vuelve pronto o mira las demás categorías.</EmptyState>}
         />
       </CatalogTemplate>

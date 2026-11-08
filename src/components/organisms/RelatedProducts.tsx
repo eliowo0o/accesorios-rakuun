@@ -16,7 +16,7 @@ export function RelatedProducts({ products, title = "También te puede gustar", 
         {title}
       </h2>
       <div className="mt-4">
-        <ProductGrid products={products} labelFor={labelFor} headingLevel="h3" compact />
+        <ProductGrid products={products} labelFor={labelFor} headingLevel="h3" variant="compact" />
       </div>
     </section>
   );
