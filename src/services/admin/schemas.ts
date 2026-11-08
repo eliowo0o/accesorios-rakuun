@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { FieldErrors } from "./types";
+import { getS3PublicBaseUrl, isProduction } from "./config";
 
 /**
  * Esquemas zod del admin. Puros (sin server-only): los usan las Server Actions y se pueden
@@ -29,14 +30,21 @@ const intField = (label: string) =>
   );
 
 /**
- * URL de imagen guardable: una ruta local ("/mock/…", "/uploads-dev/…") o una URL https
- * (el bucket S3). Nunca javascript:, data:, ni rutas tipo "//host".
+ * URL de imagen guardable. En producción SOLO URLs del bucket S3 propio (la BD guarda solo URLs de S3);
+ * en desarrollo también rutas locales ("/mock/…", "/uploads-dev/…"). Nunca javascript:, data: ni "//host".
  */
-export const imageUrlSchema = z
-  .string()
-  .trim()
-  .max(1000)
-  .refine((v) => (v.startsWith("/") && !v.startsWith("//")) || /^https:\/\/[^\s]+$/.test(v), "URL de imagen inválida");
+export function isAllowedImageUrl(v: string): boolean {
+  if (/\s/.test(v)) return false;
+  const s3 = getS3PublicBaseUrl();
+  if (s3 && v.startsWith(`${s3}/`)) return true;
+  // Rutas locales (datos de prueba y subidas en modo dev) solo fuera de producción.
+  if (!isProduction()) {
+    return (v.startsWith("/") && !v.startsWith("//")) || (!s3 && /^https:\/\/[^\s]+$/.test(v));
+  }
+  return false;
+}
+
+export const imageUrlSchema = z.string().trim().max(1000).refine(isAllowedImageUrl, "URL de imagen inválida");
 
 const optionalImageUrl = z.preprocess((v) => text(v).trim() || null, imageUrlSchema.nullable());
 

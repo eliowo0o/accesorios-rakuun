@@ -23,7 +23,8 @@ export const getAdminSession = cache(async (): Promise<AdminSession | null> => {
   if (mode === "supabase") {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) return null;
+    // Los usuarios anónimos de Supabase también son "authenticated": no son admin.
+    if (error || !data.user || data.user.is_anonymous) return null;
     return { email: data.user.email ?? "admin", mode };
   }
   if (mode === "dev") {

@@ -14,7 +14,8 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
   images: {
-    remotePatterns: [...s3Pattern, new URL("https://*.amazonaws.com/**")],
+    // Solo el bucket propio: un comodín *.amazonaws.com dejaría usar el optimizador con buckets ajenos.
+    remotePatterns: s3Pattern,
     formats: ["image/avif", "image/webp"],
   },
   async headers() {
