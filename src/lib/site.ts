@@ -1,5 +1,9 @@
 /** URL pública del sitio (canonical, sitemap, links en el mensaje de WhatsApp). */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
+// Prioridad: variable propia → dominio de producción que Vercel expone solo → localhost.
+const vercelProd = process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL;
+export const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL || (vercelProd ? `https://${vercelProd}` : "http://localhost:3000")
+).replace(/\/$/, "");
 
 export const routes = {
   home: () => "/",
