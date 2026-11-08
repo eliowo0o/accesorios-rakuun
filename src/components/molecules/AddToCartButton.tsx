@@ -1,7 +1,8 @@
 "use client";
 
 import { Check, Minus, Plus } from "lucide-react";
-import { Button, type ButtonProps, IconButton } from "@/components/atoms";
+import { Button, type ButtonProps } from "@/components/atoms/Button";
+import { IconButton } from "@/components/atoms/IconButton";
 import { useAddToCart } from "@/hooks/useAddToCart";
 import { cn } from "@/lib/cn";
 import type { CartItem } from "@/types";

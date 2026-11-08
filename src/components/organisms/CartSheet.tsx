@@ -1,7 +1,8 @@
 "use client";
 
 import { MessageCircle, ShoppingBag, TriangleAlert } from "lucide-react";
-import { Button, Price } from "@/components/atoms";
+import { Button } from "@/components/atoms/Button";
+import { Price } from "@/components/atoms/Price";
 import { Sheet } from "@/components/molecules/Sheet";
 import { CartLine } from "@/components/molecules/CartLine";
 import { CheckoutForm } from "@/components/organisms/CheckoutForm";

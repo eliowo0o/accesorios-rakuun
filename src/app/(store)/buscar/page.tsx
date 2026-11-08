@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Skeleton } from "@/components/atoms";
+import { Skeleton } from "@/components/atoms/Skeleton";
 import { EmptyState } from "@/components/molecules/EmptyState";
 import { SearchBar } from "@/components/molecules/SearchBar";
 import { CategoryBar } from "@/components/organisms/CategoryBar";

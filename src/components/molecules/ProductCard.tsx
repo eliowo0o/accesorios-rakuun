@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Badge, Price } from "@/components/atoms";
+import { Badge } from "@/components/atoms/Badge";
+import { Price } from "@/components/atoms/Price";
 import { cn } from "@/lib/cn";
 import { routes } from "@/lib/site";
 import type { Product } from "@/types";

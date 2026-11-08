@@ -1,6 +1,9 @@
 import type { FormEvent, ReactNode } from "react";
 import { Bike, Package, Store, Truck, type LucideIcon } from "lucide-react";
-import { Input, Label, Select, Textarea } from "@/components/atoms";
+import { Input } from "@/components/atoms/Input";
+import { Label } from "@/components/atoms/Label";
+import { Select } from "@/components/atoms/Select";
+import { Textarea } from "@/components/atoms/Textarea";
 import type { CheckoutFieldIds } from "@/hooks/useCheckoutForm";
 import type { CheckoutErrors } from "@/lib/checkout-schema";
 import { NAME_MAX, NOTE_MAX } from "@/lib/checkout-schema";

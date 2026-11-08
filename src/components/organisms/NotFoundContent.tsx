@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SearchX } from "lucide-react";
+import { buttonClass } from "@/components/atoms/Button";
 import { routes } from "@/lib/site";
 
 /** Contenido de la página 404 (compartido por la tienda y el 404 global). */
@@ -14,16 +15,10 @@ export function NotFoundContent() {
         Puede que el producto ya no esté disponible o que el enlace haya cambiado. Mira lo que tenemos ahora en el catálogo.
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-3">
-        <Link
-          href={routes.home()}
-          className="inline-flex h-11 items-center rounded-full bg-primary px-5 font-display text-sm font-semibold text-white transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-        >
+        <Link href={routes.home()} className={buttonClass()}>
           Ver productos
         </Link>
-        <Link
-          href={routes.search()}
-          className="inline-flex h-11 items-center rounded-full border border-line px-5 font-display text-sm font-semibold text-ink transition-colors hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-        >
+        <Link href={routes.search()} className={buttonClass({ variant: "outline" })}>
           Buscar
         </Link>
       </div>

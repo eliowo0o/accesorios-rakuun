@@ -2,7 +2,7 @@
 
 import { createContext, use, useId, type ReactNode } from "react";
 import { X } from "lucide-react";
-import { IconButton } from "@/components/atoms";
+import { IconButton } from "@/components/atoms/IconButton";
 import { useSheet } from "@/hooks/useSheet";
 import { cn } from "@/lib/cn";
 

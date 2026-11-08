@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag, Trash2 } from "lucide-react";
-import { IconButton, Price } from "@/components/atoms";
+import { IconButton } from "@/components/atoms/IconButton";
+import { Price } from "@/components/atoms/Price";
 import { QuantityStepper } from "@/components/molecules/QuantityStepper";
 import { MAX_QUANTITY, MIN_QUANTITY } from "@/reducers/cartReducer";
 import { routes } from "@/lib/site";
