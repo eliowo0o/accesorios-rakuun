@@ -1,4 +1,5 @@
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import type React from "react";
+import { type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,10 +14,7 @@ const variants = {
   light: "bg-white/90 text-ink shadow-sm hover:bg-white",
 };
 
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
-  { label, variant = "ghost", className, type = "button", ...props },
-  ref,
-) {
+export function IconButton({ ref, label, variant = "ghost", className, type = "button", ...props }: IconButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
   return (
     <button
       ref={ref}
@@ -32,4 +30,4 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       {...props}
     />
   );
-});
+}

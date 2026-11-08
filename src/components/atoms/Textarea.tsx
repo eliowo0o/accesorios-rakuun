@@ -1,4 +1,5 @@
-import { forwardRef, type TextareaHTMLAttributes } from "react";
+import type React from "react";
+import { type TextareaHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 import { fieldBase } from "./Input";
 
@@ -6,10 +7,7 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   invalid?: boolean;
 }
 
-export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { invalid, className, rows = 3, ...props },
-  ref,
-) {
+export function Textarea({ ref, invalid, className, rows = 3, ...props }: TextareaProps & { ref?: React.Ref<HTMLTextAreaElement> }) {
   return (
     <textarea
       ref={ref}
@@ -19,4 +17,4 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
       {...props}
     />
   );
-});
+}

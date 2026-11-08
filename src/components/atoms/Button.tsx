@@ -1,4 +1,5 @@
-import { forwardRef, type ButtonHTMLAttributes } from "react";
+import type React from "react";
+import { type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
 export type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "whatsapp" | "danger" | "light";
@@ -26,10 +27,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   fullWidth?: boolean;
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = "primary", size = "md", fullWidth, className, type = "button", ...props },
-  ref,
-) {
+export function Button({ ref, variant = "primary", size = "md", fullWidth, className, type = "button", ...props }: ButtonProps & { ref?: React.Ref<HTMLButtonElement> }) {
   return (
     <button
       ref={ref}
@@ -46,4 +44,4 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {...props}
     />
   );
-});
+}
