@@ -55,3 +55,7 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
