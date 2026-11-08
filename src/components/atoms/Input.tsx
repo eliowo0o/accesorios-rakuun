@@ -7,8 +7,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const fieldBase =
-  "w-full rounded-2xl border bg-white px-4 text-base text-ink placeholder:text-gray-400 transition-colors " +
-  "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:bg-gray-50";
+  "w-full rounded-2xl border bg-white px-4 text-base text-ink placeholder:text-gray-500 transition-colors " +
+  "focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 disabled:bg-gray-50";
 
 export function Input({ ref, invalid, className, ...props }: InputProps & { ref?: React.Ref<HTMLInputElement> }) {
   return (

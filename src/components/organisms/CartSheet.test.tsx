@@ -113,7 +113,7 @@ describe("CartSheet", () => {
     const user = setup();
     await user.click(screen.getByText("abrir carrito"));
     const dialog = screen.getByRole("dialog");
-    expect(within(dialog).getByText("Tu pedido está vacío")).toBeInTheDocument();
+    expect(within(dialog).getByText("Tu carrito está vacío")).toBeInTheDocument();
     await user.click(within(dialog).getByRole("button", { name: "Ver productos" }));
     expect(screen.getByRole("dialog", { hidden: true })).not.toHaveAttribute("open");
   });
@@ -135,8 +135,8 @@ describe("CartSheet", () => {
     await user.click(s.getByRole("button", { name: "Quitar uno de Collar estrellas colgantes" }));
     expect(s.getByText("(1 pieza)")).toBeInTheDocument();
 
-    await user.click(s.getByRole("button", { name: "Quitar Collar estrellas colgantes del pedido" }));
-    expect(s.getByText("Tu pedido está vacío")).toBeInTheDocument();
+    await user.click(s.getByRole("button", { name: "Quitar Collar estrellas colgantes del carrito" }));
+    expect(s.getByText("Tu carrito está vacío")).toBeInTheDocument();
   });
 
   it("valida al enviar y no abre WhatsApp si faltan datos", async () => {
@@ -191,6 +191,12 @@ describe("CartSheet", () => {
     const text = decodeURIComponent(new URL(expected).searchParams.get("text") ?? "");
     expect(text).toContain("Celular: 55 1234 5678");
     expect(text).toContain("Total: $240.00 MXN");
+
+    // Confirmación + vaciar carrito.
+    expect(s.getByText("Abrimos WhatsApp con tu pedido")).toBeInTheDocument();
+    await user.click(s.getByRole("button", { name: "Vaciar carrito" }));
+    expect(s.getByText("Tu carrito está vacío")).toBeInTheDocument();
+    expect(s.queryByText("Abrimos WhatsApp con tu pedido")).not.toBeInTheDocument();
   });
 
   it("'Solo pedir información' abre WhatsApp sin exigir datos", async () => {
@@ -229,12 +235,12 @@ describe("CartSheet", () => {
     await act(() => user.click(screen.getByText("abrir carrito")));
 
     const s = sheet();
-    expect(await s.findByText("Actualizamos tu pedido")).toBeInTheDocument();
+    expect(await s.findByText("Actualizamos tu carrito")).toBeInTheDocument();
     expect(s.getByText(/«Collar estrellas colgantes» cambió de precio: antes MXN \$ 120,00, ahora MXN \$ 150,00/)).toBeInTheDocument();
     expect(s.getByText(/Quitamos «Brazalete nube»/)).toBeInTheDocument();
     expect(s.queryByRole("link", { name: "Brazalete nube" })).not.toBeInTheDocument();
 
     await user.click(s.getByRole("button", { name: "Entendido" }));
-    expect(s.queryByText("Actualizamos tu pedido")).not.toBeInTheDocument();
+    expect(s.queryByText("Actualizamos tu carrito")).not.toBeInTheDocument();
   });
 });

@@ -48,7 +48,18 @@ export function AddToCartWithQuantity({ item }: { item: Snapshot }) {
           <Plus aria-hidden className="size-4" />
         </IconButton>
       </div>
-      <AddButton added={added} onClick={add} label="Agregar al carrito" name={item.name} variant="primary" size="lg" fullWidth className="min-w-0 px-4 whitespace-nowrap" />
+      {/* A 375px "Agregar al carrito" no cabe junto al stepper: bajo `sm` se muestra "Agregar". */}
+      <AddButton
+        added={added}
+        onClick={add}
+        label="Agregar al carrito"
+        shortLabel="Agregar"
+        name={item.name}
+        variant="primary"
+        size="lg"
+        fullWidth
+        className="min-w-0 px-4 whitespace-nowrap"
+      />
     </div>
   );
 }
@@ -57,9 +68,17 @@ function AddButton({
   added,
   onClick,
   label,
+  shortLabel,
   name,
   ...buttonProps
-}: { added: boolean; onClick: () => void; label: string; name: string } & Pick<ButtonProps, "variant" | "size" | "fullWidth" | "className">) {
+}: {
+  added: boolean;
+  onClick: () => void;
+  label: string;
+  /** Texto visible en pantallas angostas (< sm); el nombre accesible sigue siendo `label`. */
+  shortLabel?: string;
+  name: string;
+} & Pick<ButtonProps, "variant" | "size" | "fullWidth" | "className">) {
   return (
     <>
       <Button
@@ -69,7 +88,16 @@ function AddButton({
         className={cn("min-h-11 relative z-10", added && "bg-primary text-white hover:bg-primary", buttonProps.className)}
       >
         {added ? <Check aria-hidden className="size-4" /> : <Plus aria-hidden className="size-4" />}
-        {added ? "Agregado" : label}
+        {added ? (
+          "Agregado"
+        ) : shortLabel ? (
+          <>
+            <span className="sm:hidden">{shortLabel}</span>
+            <span className="hidden sm:inline">{label}</span>
+          </>
+        ) : (
+          label
+        )}
       </Button>
       <span aria-live="polite" className="sr-only">
         {added ? `${name} se agregó al carrito` : ""}

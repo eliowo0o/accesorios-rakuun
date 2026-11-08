@@ -49,7 +49,7 @@ export function CartLine({ item, onDecrement, onIncrement, onRemove, onNavigate 
           onDecrement={onDecrement}
           onIncrement={onIncrement}
         />
-        <IconButton label={`Quitar ${item.name} del pedido`} onClick={onRemove} className="text-gray-500 hover:text-danger">
+        <IconButton label={`Quitar ${item.name} del carrito`} onClick={onRemove} className="text-gray-500 hover:text-danger">
           <Trash2 className="size-4" aria-hidden />
         </IconButton>
       </div>

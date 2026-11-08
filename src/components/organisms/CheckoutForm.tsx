@@ -62,6 +62,8 @@ export function CheckoutForm({ values, errors, ids, deliveryOptions, paymentMeth
           autoComplete="name"
           placeholder="Ana López"
           maxLength={NAME_MAX}
+          required
+          aria-required
           value={values.name}
           invalid={!!errors.name}
           aria-describedby={describedBy("name")}
@@ -79,6 +81,8 @@ export function CheckoutForm({ values, errors, ids, deliveryOptions, paymentMeth
           inputMode="tel"
           autoComplete="tel"
           placeholder="55 1234 5678"
+          required
+          aria-required
           value={values.phone}
           invalid={!!errors.phone}
           aria-describedby={describedBy("phone")}
@@ -88,7 +92,7 @@ export function CheckoutForm({ values, errors, ids, deliveryOptions, paymentMeth
       </Field>
 
       {deliveryOptions.length > 0 && (
-        <fieldset aria-describedby={describedBy("delivery")}>
+        <fieldset role="radiogroup" aria-invalid={errors.delivery ? true : undefined} aria-describedby={describedBy("delivery")}>
           <legend className="mb-1.5 block text-sm font-medium text-ink">¿Cómo lo recibes?</legend>
           <div className="grid grid-cols-3 gap-2">
             {deliveryOptions.map((option, index) => {
