@@ -1,5 +1,7 @@
 "use server";
 
+import { after } from "next/server";
+import { describeError, logError } from "@/lib/error-log/logger";
 import { requireAdmin } from "../auth";
 import { uploadRequestSchema, type UploadRequest } from "../schemas";
 import { createUploadTarget } from "../storage";
@@ -19,7 +21,10 @@ export async function requestImageUpload(input: UploadRequest): Promise<UploadTa
   try {
     return { ok: true, ...(await createUploadTarget(parsed.data)) };
   } catch (error) {
-    console.error("[admin/uploads]", error);
+    const { message, stack } = describeError(error);
+    after(() =>
+      logError({ source: "action", message: `Preparar subida: ${message}`, stack, context: { folder: parsed.data.folder, contentType: parsed.data.contentType } }),
+    );
     return { ok: false, error: error instanceof Error && error.message.startsWith("Falta") ? error.message : "No se pudo preparar la subida." };
   }
 }

@@ -4,7 +4,8 @@ import { useCallback, useReducer, useState, type ChangeEvent } from "react";
 import { requestImageUpload } from "@/services/admin/actions/uploads";
 import type { ImageContentType, UploadFolder } from "@/services/admin/schemas";
 import { initialUploadState, isUploading, uploadReducer, validateImageFile } from "./imageUploadReducer";
-import { putFile } from "./putFile";
+import { putFile, UploadError } from "./putFile";
+import { reportClientError } from "@/services/error-actions";
 
 interface Options {
   folder: UploadFolder;
@@ -36,7 +37,24 @@ export function useImageUpload({ folder, onUploaded, removeOnDone = true, limit 
         onUploaded(target.publicUrl, file.name);
         if (removeOnDone) dispatch({ type: "remove", id });
       } catch (error) {
-        dispatch({ type: "fail", id, error: error instanceof Error ? error.message : "La subida falló." });
+        const message = error instanceof Error ? error.message : "La subida falló.";
+        dispatch({ type: "fail", id, error: message });
+        // Que quede en /admin/errores con el contexto técnico (no se muestra al usuario).
+        reportClientError({
+          message: `Subida de imagen: ${message}`,
+          level: "warning",
+          stack: error instanceof Error ? (error.stack ?? null) : null,
+          path: window.location.pathname,
+          context: {
+            folder,
+            fileType: file.type,
+            fileSizeKb: Math.round(file.size / 1024),
+            ...(error instanceof UploadError ? error.details : { phase: "prepare" }),
+            ...(error instanceof UploadError && error.details.reason === "network"
+              ? { hint: "Error de red al subir a S3: revisa la configuración CORS del bucket (origen permitido y método PUT)." }
+              : {}),
+          },
+        }).catch(() => {});
       }
     },
     [folder, onUploaded, removeOnDone],

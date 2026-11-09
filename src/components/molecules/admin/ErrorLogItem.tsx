@@ -27,6 +27,7 @@ export function ErrorLogItem({ log }: { log: ErrorLog }) {
               <Icon aria-hidden className="size-3.5" />
               {source.label}
             </span>
+            {log.level === "warning" && <Badge tone="neutral">Aviso</Badge>}
             {log.occurrences > 1 && <Badge tone="soft">{pluralize(log.occurrences, "vez", "veces")}</Badge>}
           </div>
           <p className="line-clamp-2 break-words font-medium text-ink group-open:line-clamp-none">{log.message}</p>

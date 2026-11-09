@@ -14,6 +14,12 @@ const clientErrorSchema = z.object({
   digest: z.string().max(100).nullish(),
   stack: z.string().max(8000).nullish(),
   path: z.string().max(500).nullish(),
+  level: z.enum(["error", "warning"]).optional(),
+  /** Datos técnicos planos (texto/número/booleano), máx. 20 campos. */
+  context: z
+    .record(z.string().max(40), z.union([z.string().max(300), z.number(), z.boolean(), z.null()]))
+    .refine((o) => Object.keys(o).length <= 20)
+    .optional(),
 });
 
 export async function reportClientError(input: z.input<typeof clientErrorSchema>): Promise<void> {
@@ -26,6 +32,8 @@ export async function reportClientError(input: z.input<typeof clientErrorSchema>
     digest: parsed.data.digest ?? null,
     stack: parsed.data.stack ?? null,
     path: parsed.data.path ?? null,
+    level: parsed.data.level,
+    context: parsed.data.context,
     userAgent: ua,
   });
 }
