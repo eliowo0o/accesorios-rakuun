@@ -85,7 +85,7 @@ function Close({ label = "Cerrar" }: { label?: string }) {
 }
 
 function Body({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 py-2", className)}>{children}</div>;
+  return <div className={cn("min-h-0 flex-auto overflow-y-auto overscroll-contain px-6 py-2", className)}>{children}</div>;
 }
 
 function Footer({ children, className }: { children: ReactNode; className?: string }) {
