@@ -12,7 +12,6 @@ const items: CartItem[] = [
 
 const form: CheckoutForm = {
   name: "  Ana ",
-  phone: "+52 55-1234-5678",
   delivery: "Envío nacional",
   payment: "Transferencia",
   note: "Para regalo, por favor",
@@ -40,7 +39,6 @@ describe("buildOrderMessage", () => {
         "Total: $240.00 MXN",
         "",
         "Nombre: Ana",
-        "Celular: 55 1234 5678",
         "Entrega: Envío nacional",
         "Pago: Transferencia",
         "Nota: Para regalo, por favor",

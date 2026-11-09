@@ -5,14 +5,14 @@ const base: CheckoutFormState = { values: emptyCheckoutForm("Recojo"), errors: {
 
 describe("checkoutFormReducer", () => {
   it("valores iniciales con entrega por defecto", () => {
-    expect(base.values).toEqual({ name: "", phone: "", delivery: "Recojo", payment: "", note: "" });
+    expect(base.values).toEqual({ name: "", delivery: "Recojo", payment: "", note: "" });
   });
 
   it("CHANGE actualiza el campo y borra solo su error", () => {
-    const withErrors = { ...base, errors: { name: "Escribe tu nombre", phone: "Escribe tu celular" } };
+    const withErrors = { ...base, errors: { name: "Escribe tu nombre", payment: "Elige cómo vas a pagar" } };
     const s = checkoutFormReducer(withErrors, { type: "CHANGE", field: "name", value: "Ana" });
     expect(s.values.name).toBe("Ana");
-    expect(s.errors).toEqual({ phone: "Escribe tu celular" });
+    expect(s.errors).toEqual({ payment: "Elige cómo vas a pagar" });
   });
 
   it("CHANGE con el mismo valor no crea estado nuevo", () => {

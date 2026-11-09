@@ -72,25 +72,6 @@ export function CheckoutForm({ values, errors, ids, deliveryOptions, paymentMeth
         <FieldError id={errorId(ids, "name")}>{errors.name}</FieldError>
       </Field>
 
-      <Field>
-        <Label htmlFor={ids.phone}>Tu número de celular</Label>
-        <Input
-          id={ids.phone}
-          name="phone"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          placeholder="55 1234 5678"
-          required
-          aria-required
-          value={values.phone}
-          invalid={!!errors.phone}
-          aria-describedby={describedBy("phone")}
-          onChange={(e) => onChange("phone", e.target.value)}
-        />
-        <FieldError id={errorId(ids, "phone")}>{errors.phone}</FieldError>
-      </Field>
-
       {deliveryOptions.length > 0 && (
         <fieldset role="radiogroup" aria-invalid={errors.delivery ? true : undefined} aria-describedby={describedBy("delivery")}>
           <legend className="mb-1.5 block text-sm font-medium text-ink">¿Cómo lo recibes?</legend>

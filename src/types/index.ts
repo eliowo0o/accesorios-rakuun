@@ -80,7 +80,6 @@ export interface CartItem {
 
 export interface CheckoutForm {
   name: string;
-  phone: string;
   delivery: string;
   payment: string;
   note: string;

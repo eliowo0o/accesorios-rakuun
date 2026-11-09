@@ -151,7 +151,7 @@ describe("CartSheet", () => {
     expect(name).toHaveAttribute("aria-invalid", "true");
     expect(name).toHaveAccessibleDescription("Escribe tu nombre");
     expect(name).toHaveFocus();
-    expect(s.getByLabelText("Tu número de celular")).toHaveAccessibleDescription("Escribe tu celular");
+    expect(s.queryByLabelText(/celular/i)).not.toBeInTheDocument();
     expect(s.getByLabelText("¿Cómo vas a pagar?")).toHaveAccessibleDescription("Elige cómo vas a pagar");
     expect(openSpy).not.toHaveBeenCalled();
 
@@ -168,7 +168,6 @@ describe("CartSheet", () => {
     const s = sheet();
 
     await user.type(s.getByLabelText("Tu nombre"), "Ana");
-    await user.type(s.getByLabelText("Tu número de celular"), "+52 55-1234-5678");
     await user.click(s.getByText("Envío nacional"));
     await user.selectOptions(s.getByLabelText("¿Cómo vas a pagar?"), "Transferencia");
     await user.type(s.getByLabelText(/Nota/), "Para regalo");
@@ -182,14 +181,14 @@ describe("CartSheet", () => {
       "5215500000000",
       buildOrderMessage(
         items,
-        { name: "Ana", phone: "5512345678", delivery: "Envío nacional", payment: "Transferencia", note: "Para regalo" },
+        { name: "Ana", delivery: "Envío nacional", payment: "Transferencia", note: "Para regalo" },
         settings,
         SITE_URL,
       ),
     );
     expect(openSpy).toHaveBeenCalledWith(expected, "_blank", "noopener");
     const text = decodeURIComponent(new URL(expected).searchParams.get("text") ?? "");
-    expect(text).toContain("Celular: 55 1234 5678");
+    expect(text).not.toContain("Celular");
     expect(text).toContain("Total: $240.00 MXN");
 
     // Confirmación + vaciar carrito.

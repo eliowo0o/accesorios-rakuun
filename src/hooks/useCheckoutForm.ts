@@ -5,7 +5,7 @@ import { checkoutFormReducer, emptyCheckoutForm, type CheckoutField } from "@/re
 import { validateCheckout, type CheckoutValidation } from "@/lib/checkout-schema";
 import type { StoreSettings } from "@/types";
 
-const FIELD_ORDER: CheckoutField[] = ["name", "phone", "delivery", "payment", "note"];
+const FIELD_ORDER: CheckoutField[] = ["name", "delivery", "payment", "note"];
 
 export type CheckoutFieldIds = Record<CheckoutField, string> & { form: string };
 
@@ -24,7 +24,6 @@ export function useCheckoutForm(settings: Pick<StoreSettings, "deliveryOptions" 
     () => ({
       form: `${baseId}-form`,
       name: `${baseId}-name`,
-      phone: `${baseId}-phone`,
       delivery: `${baseId}-delivery`,
       payment: `${baseId}-payment`,
       note: `${baseId}-note`,

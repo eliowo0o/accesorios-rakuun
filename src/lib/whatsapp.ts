@@ -1,7 +1,6 @@
 import type { CartItem, CheckoutForm, StoreSettings } from "@/types";
 import { formatPricePlain } from "@/lib/format";
 import { routes } from "@/lib/site";
-import { formatMxPhone, normalizeMxPhone } from "@/lib/checkout-schema";
 import { selectTotal } from "@/reducers/cartReducer";
 
 /**
@@ -49,8 +48,6 @@ function fitToUrl(number: string, build: (withLinks: boolean) => string): string
 }
 
 export function buildOrderMessage(items: CartItem[], form: CheckoutForm, settings: MessageSettings, siteUrl: string): string {
-  const digits = normalizeMxPhone(form.phone);
-  const phone = digits ? formatMxPhone(digits) : form.phone.trim();
   return fitToUrl(settings.whatsappNumber, (withLinks) =>
     compose([
       [`¡Hola ${settings.storeName}! 👋 Quiero hacer un pedido:`],
@@ -58,7 +55,6 @@ export function buildOrderMessage(items: CartItem[], form: CheckoutForm, setting
       [totalLine(items)],
       [
         `Nombre: ${form.name.trim()}`,
-        phone && `Celular: ${phone}`,
         form.delivery.trim() && `Entrega: ${form.delivery.trim()}`,
         form.payment.trim() && `Pago: ${form.payment.trim()}`,
         form.note.trim() && `Nota: ${form.note.trim()}`,

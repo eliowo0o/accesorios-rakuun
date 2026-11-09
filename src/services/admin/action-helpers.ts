@@ -8,7 +8,7 @@ import { toFieldErrors } from "./schemas";
 import type { ActionResult } from "./types";
 
 export function invalid(error: z.ZodError): ActionResult {
-  return { ok: false, error: "Revisa los campos marcados.", fieldErrors: toFieldErrors(error) };
+  return { ok: false, error: "Hay campos con error más arriba (marcados en rojo). Corrígelos y vuelve a guardar.", fieldErrors: toFieldErrors(error) };
 }
 
 /** Convierte errores del repositorio en un resultado mostrable. Los inesperados se registran. */

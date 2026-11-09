@@ -15,7 +15,7 @@ export type CheckoutFormAction =
   | { type: "RESET"; values: CheckoutForm };
 
 export function emptyCheckoutForm(defaultDelivery = ""): CheckoutForm {
-  return { name: "", phone: "", delivery: defaultDelivery, payment: "", note: "" };
+  return { name: "", delivery: defaultDelivery, payment: "", note: "" };
 }
 
 export function checkoutFormReducer(state: CheckoutFormState, action: CheckoutFormAction): CheckoutFormState {

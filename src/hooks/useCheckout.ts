@@ -13,7 +13,7 @@ function openWhatsApp(number: string, message: string) {
 
 /**
  * Checkout del carrito: formulario + envío por WhatsApp.
- * - submitOrder: valida (nombre, celular, entrega, pago, nota) y abre wa.me con el pedido.
+ * - submitOrder: valida (nombre, entrega, pago, nota) y abre wa.me con el pedido.
  * - requestInfo: abre wa.me preguntando por los productos, sin exigir datos.
  * - orderSent: true tras enviar el pedido, mientras el carrito no cambie; se ofrece vaciarlo
  *   (no se vacía solo: la persona puede volver si WhatsApp no se abrió).
