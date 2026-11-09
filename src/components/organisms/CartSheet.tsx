@@ -23,7 +23,7 @@ export function CartSheet({ settings }: { settings: StoreSettings }) {
   const isEmpty = cart.items.length === 0;
 
   return (
-    <Sheet open={cart.isOpen} onClose={cart.close}>
+    <Sheet open={cart.isOpen} onClose={cart.close} placement="right">
       <Sheet.Header>
         <Sheet.Title>Tu pedido</Sheet.Title>
         <Sheet.Close label="Cerrar carrito" />
