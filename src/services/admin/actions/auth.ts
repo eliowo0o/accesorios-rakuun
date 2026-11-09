@@ -10,7 +10,11 @@ import type { ActionResult, ActionState } from "../types";
 /** Login con Supabase Auth (email + contraseña). Sin registro ni "olvidé contraseña". */
 export async function signIn(_prev: ActionState, formData: FormData): Promise<ActionResult> {
   const mode = getAdminMode();
-  if (mode === "unconfigured") return { ok: false, error: "Falta configurar Supabase." };
+  if (mode === "unconfigured") {
+    // Detalle técnico solo en logs del servidor; al usuario, mensaje genérico.
+    console.error("[admin] Supabase no configurado: faltan NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY");
+    return { ok: false, error: "El panel no está disponible en este momento. Intenta más tarde." };
+  }
 
   const parsed = parseLoginForm(formData);
   if (!parsed.success) return { ok: false, error: "Revisa los campos marcados.", fieldErrors: toFieldErrors(parsed.error) };

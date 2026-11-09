@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
         {mode === "unconfigured" ? (
           <p role="alert" className="mt-4 flex items-start gap-2 rounded-2xl bg-red-50 px-4 py-3 text-sm text-danger">
             <CircleAlert aria-hidden className="mt-0.5 size-4 shrink-0" />
-            Falta configurar Supabase. Agrega NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY en Vercel y vuelve a desplegar.
+            El panel no está disponible en este momento. Intenta más tarde.
           </p>
         ) : (
           <>
