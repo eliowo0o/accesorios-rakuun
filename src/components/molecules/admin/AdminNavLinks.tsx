@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FolderTree, LayoutDashboard, Package, Settings } from "lucide-react";
+import { Bug, FolderTree, LayoutDashboard, Package, Settings } from "lucide-react";
 import { chipClass } from "@/components/atoms/Chip";
 import { cn } from "@/lib/cn";
 import { ADMIN_ROUTES } from "@/services/admin/config";
@@ -9,16 +9,17 @@ const LINKS = [
   { href: ADMIN_ROUTES.categories, label: "Categorías", icon: FolderTree },
   { href: ADMIN_ROUTES.products, label: "Productos", icon: Package },
   { href: ADMIN_ROUTES.settings, label: "Ajustes", icon: Settings },
+  { href: ADMIN_ROUTES.errors, label: "Errores", icon: Bug },
 ];
 
 /**
- * Links del panel. Celular: 4 botones iguales (ícono arriba, texto abajo) que siempre caben a 320px.
+ * Links del panel. Celular: 5 botones iguales (ícono arriba, texto abajo) que siempre caben a 320px.
  * Desde `sm`: chips en fila. Sin `isActive` se pinta sin resaltar (fallback).
  */
 export function AdminNavLinks({ isActive }: { isActive?: (href: string) => boolean }) {
   return (
     <nav aria-label="Secciones del admin">
-      <ul className="grid grid-cols-4 gap-1.5 sm:flex sm:gap-2">
+      <ul className="grid grid-cols-5 gap-1 sm:flex sm:gap-2">
         {LINKS.map(({ href, label, icon: Icon }) => {
           const active = isActive?.(href) ?? false;
           return (

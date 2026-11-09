@@ -2,12 +2,14 @@
 
 import { RotateCw, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
+import { useReportError } from "@/hooks/useReportError";
 
 /**
  * Error inesperado en una página de la tienda (p. ej. la base de datos no respondió).
  * `retry()` vuelve a pedir los datos y a renderizar el segmento (Next 16).
  */
-export default function StoreError({ retry }: { error: unknown; retry: () => void }) {
+export default function StoreError({ error, retry }: { error: unknown; retry: () => void }) {
+  useReportError(error);
   return (
     <section role="alert" className="mx-auto flex max-w-md flex-col items-center px-4 py-20 text-center">
       <span className="inline-flex size-16 items-center justify-center rounded-full bg-primary-soft text-primary">

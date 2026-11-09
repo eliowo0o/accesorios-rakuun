@@ -1,4 +1,6 @@
 import "server-only";
+import { after } from "next/server";
+import { describeError, logError } from "@/lib/error-log/logger";
 import type { z } from "zod";
 import { slugify } from "@/lib/slug";
 import { AdminRepoError, resolveUniqueSlug } from "./rules";
@@ -18,7 +20,9 @@ export function fromError(error: unknown): ActionResult {
       fieldErrors: error.field ? { [error.field]: [error.message] } : undefined,
     };
   }
-  console.error("[admin] Error inesperado", error);
+  // Se atrapó aquí (no llega a onRequestError): registrarlo después de responder.
+  const { message, stack, digest } = describeError(error);
+  after(() => logError({ source: "action", message, stack, digest, context: { where: "admin action" } }));
   return { ok: false, error: "Algo salió mal. Intenta de nuevo." };
 }
 

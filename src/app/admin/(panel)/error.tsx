@@ -1,16 +1,12 @@
 "use client"; // Los error boundaries deben ser Client Components.
 
-import { useEffect } from "react";
 import { CircleAlert, RotateCw } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
+import { useReportError } from "@/hooks/useReportError";
 
 /** Error inesperado en una pantalla del admin: mensaje en español + "Reintentar" (Next 16: prop `retry`). */
 export default function AdminPanelError({ error, retry }: { error: unknown; retry: () => void }) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
-
-  const digest = error instanceof Error && "digest" in error && typeof error.digest === "string" ? error.digest : null;
+  const digest = useReportError(error);
 
   return (
     <div role="alert" className="flex flex-col items-start gap-4 rounded-[var(--radius-card)] border border-red-200 bg-white p-5">

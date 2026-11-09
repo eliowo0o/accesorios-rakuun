@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { EyeOff, FolderTree, PackageX, Package, Plus, Settings, Star } from "lucide-react";
+import { Bug, EyeOff, FolderTree, PackageX, Package, Plus, Settings, Star } from "lucide-react";
 import { StatCard } from "@/components/molecules/admin/StatCard";
 import { buttonClass } from "@/components/atoms/Button";
 import { ADMIN_ROUTES } from "@/services/admin/config";
 import type { AdminSummary } from "@/services/admin/types";
 
-export function SummaryGrid({ summary }: { summary: AdminSummary }) {
+export function SummaryGrid({ summary, openErrors }: { summary: AdminSummary; openErrors: number }) {
   return (
     <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -19,6 +19,7 @@ export function SummaryGrid({ summary }: { summary: AdminSummary }) {
           href={ADMIN_ROUTES.categories}
           icon={<FolderTree className="size-5" />}
         />
+        <StatCard label="Errores abiertos" value={openErrors} href={ADMIN_ROUTES.errors} icon={<Bug className="size-5" />} />
       </div>
 
       <section aria-labelledby="quick-actions" className="flex flex-col gap-3">

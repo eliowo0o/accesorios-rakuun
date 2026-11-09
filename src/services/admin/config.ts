@@ -20,6 +20,7 @@ export const ADMIN_ROUTES = {
   newProduct: "/admin/productos/nuevo",
   product: (id: string) => `/admin/productos/${id}`,
   settings: "/admin/ajustes",
+  errors: "/admin/errores",
 } as const;
 
 export function getSupabaseEnv(): { url: string; anonKey: string } | null {

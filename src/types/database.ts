@@ -66,6 +66,25 @@ export type StoreSettingsRow = {
   updated_at: string;
 };
 
+export type ErrorLogRow = {
+  id: string;
+  fingerprint: string;
+  source: "server" | "client" | "action";
+  level: "error" | "warning";
+  message: string;
+  digest: string | null;
+  stack: string | null;
+  path: string | null;
+  route: string | null;
+  context: Json;
+  user_agent: string | null;
+  occurrences: number;
+  first_seen_at: string;
+  last_seen_at: string;
+  resolved: boolean;
+  resolved_at: string | null;
+};
+
 export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13";
@@ -175,6 +194,13 @@ export type Database = {
         Update: Partial<StoreSettingsRow>;
         Relationships: [];
       };
+      /** Migración 0005. Solo se escribe vía la función log_error. */
+      error_logs: {
+        Row: ErrorLogRow;
+        Insert: never;
+        Update: Partial<Pick<ErrorLogRow, "resolved" | "resolved_at">>;
+        Relationships: [];
+      };
     };
     Views: { [_ in never]: never };
     Functions: {
@@ -189,6 +215,21 @@ export type Database = {
           /** [{ url, alt }] en el orden final. */
           p_images: Json;
           p_category_ids: string[];
+        };
+        Returns: undefined;
+      };
+      /** Migración 0005: registra un error (agrupa repetidos, limita spam). */
+      log_error: {
+        Args: {
+          p_source: string;
+          p_message: string;
+          p_digest?: string | null;
+          p_stack?: string | null;
+          p_path?: string | null;
+          p_route?: string | null;
+          p_context?: Json;
+          p_user_agent?: string | null;
+          p_level?: string;
         };
         Returns: undefined;
       };
