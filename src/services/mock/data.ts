@@ -105,7 +105,7 @@ export const mockSettings = {
   tagline: "Envíos a todo México",
   heroImageUrl: "/mock/hero.jpg",
   logoUrl: "/mock/logo.jpg",
-  whatsappNumber: "5215500000000",
+  whatsappNumber: "525543799503",
   instagramUrl: "https://instagram.com/",
   location: "CDMX",
   paymentMethods: ["Efectivo", "Transferencia"],

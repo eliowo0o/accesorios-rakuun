@@ -27,7 +27,7 @@ interface S3Env {
 
 export function getS3Env(): S3Env | null {
   const region = process.env.AWS_REGION;
-  const bucket = process.env.S3_BUCKET;
+  const bucket = process.env.S3_BUCKET_NAME ?? process.env.S3_BUCKET;
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const publicBaseUrl = process.env.NEXT_PUBLIC_S3_PUBLIC_BASE_URL?.replace(/\/+$/, "");
