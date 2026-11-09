@@ -56,6 +56,10 @@ Lee `AGENTS.md` y la doc local en `node_modules/next/dist/docs/01-app/` antes de
 - `web-design-guidelines` → revisión de UI/accesibilidad al cerrar una fase.
 - `ui-ux-pro-max` → reglas de UX y checklist pre-entrega. **No** uses su paleta ni tipografía: la identidad está en `RAKUUN - Identidad visual.md`.
 
+## Scripts SQL (no van en git)
+
+Las migraciones y el seed de Supabase **no se suben a GitHub** (decisión del usuario, 2026-11-09). Viven en `supabase/` local (ignorado por git) y su copia oficial está en Obsidian: `/Users/angelcstd/Documents/Obsidian Vault/RAKUUN/sql/`. Si creas o cambias un script, guárdalo en ambos lugares y dale al usuario el SQL para correrlo en el SQL Editor de Supabase. Nunca hagas `git add -f supabase/`.
+
 ## Comandos
 
 ```bash

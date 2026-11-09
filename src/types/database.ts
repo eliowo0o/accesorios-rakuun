@@ -1,6 +1,6 @@
 /**
  * Tipos de la base de datos (Supabase / Postgres), escritos a mano según
- * supabase/migrations/*.sql. Formato compatible con los genéricos de supabase-js
+ * los scripts SQL (fuera del repo: Obsidian RAKUUN/sql). Formato compatible con los genéricos de supabase-js
  * (`createClient<Database>()`). Si cambias el SQL, actualiza esto.
  *
  * Se usan `type` (no `interface`) porque supabase-js exige Record<string, unknown>.

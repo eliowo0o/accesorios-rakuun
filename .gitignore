@@ -47,3 +47,6 @@ next-env.d.ts
 
 # subidas locales del admin en modo desarrollo (sin AWS)
 /public/uploads-dev/
+
+# Scripts SQL: viven solo en local y en Obsidian (RAKUUN/sql), no en GitHub
+/supabase/
