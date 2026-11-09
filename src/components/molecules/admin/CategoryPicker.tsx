@@ -42,7 +42,7 @@ export function CategoryPicker({
           </fieldset>
         );
       })}
-      {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+      {error && <p role="alert" data-field-error className="text-sm text-danger">{error}</p>}
     </div>
   );
 }

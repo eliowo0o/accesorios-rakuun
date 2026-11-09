@@ -48,7 +48,7 @@ export function FormField({
         </p>
       )}
       {error && (
-        <p id={errorId} role="alert" className="mt-1 text-sm text-danger">
+        <p id={errorId} role="alert" data-field-error className="mt-1 text-sm text-danger">
           {error}
         </p>
       )}

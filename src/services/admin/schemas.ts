@@ -37,6 +37,8 @@ export function isAllowedImageUrl(v: string): boolean {
   if (/\s/.test(v)) return false;
   const s3 = getS3PublicBaseUrl();
   if (s3 && v.startsWith(`${s3}/`)) return true;
+  // Imágenes de prueba incluidas en el propio sitio (public/mock): mismo origen, seguras. Las usa seed.sql.
+  if (/^\/mock\/[\w.-]+$/.test(v)) return true;
   // Rutas locales (datos de prueba y subidas en modo dev) solo fuera de producción.
   if (!isProduction()) {
     return (v.startsWith("/") && !v.startsWith("//")) || (!s3 && /^https:\/\/[^\s]+$/.test(v));

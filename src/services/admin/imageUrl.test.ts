@@ -11,7 +11,6 @@ describe("isAllowedImageUrl", () => {
     vi.stubEnv("NEXT_PUBLIC_S3_PUBLIC_BASE_URL", S3);
     expect(isAllowedImageUrl(`${S3}/products/a.webp`)).toBe(true);
     expect(isAllowedImageUrl("https://otro.com/x.png")).toBe(false);
-    expect(isAllowedImageUrl("/mock/logo.jpg")).toBe(false);
     expect(isAllowedImageUrl(`${S3}.evil.com/x.png`)).toBe(false);
   });
   it("desarrollo: rutas locales, nunca javascript:/data:/protocol-relative", () => {
@@ -21,5 +20,15 @@ describe("isAllowedImageUrl", () => {
     expect(isAllowedImageUrl("//evil.com/x.png")).toBe(false);
     expect(isAllowedImageUrl("javascript:alert(1)")).toBe(false);
     expect(isAllowedImageUrl("data:image/png;base64,AAA")).toBe(false);
+  });
+});
+
+describe("isAllowedImageUrl: imágenes de prueba del sitio", () => {
+  it("producción acepta /mock/* (archivos incluidos en el sitio) pero no /uploads-dev/*", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_S3_PUBLIC_BASE_URL", S3);
+    expect(isAllowedImageUrl("/mock/hero.jpg")).toBe(true);
+    expect(isAllowedImageUrl("/mock/../secreto")).toBe(false);
+    expect(isAllowedImageUrl("/uploads-dev/a.jpg")).toBe(false);
   });
 });

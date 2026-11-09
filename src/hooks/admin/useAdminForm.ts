@@ -1,6 +1,6 @@
 "use client";
 
-import { startTransition, useActionState, type FormEvent } from "react";
+import { startTransition, useActionState, useEffect, useRef, type FormEvent } from "react";
 import type { ActionResult, ActionState } from "@/services/admin/types";
 
 type ServerAction = (prev: ActionState, formData: FormData) => Promise<ActionResult>;
@@ -17,8 +17,20 @@ export function useAdminForm(action: ServerAction, options: { onSuccess?: (resul
     return result;
   }, null);
 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  // Si el servidor marcó campos, llevar al primero (puede estar fuera de la vista) y enfocarlo.
+  useEffect(() => {
+    if (!state || state.ok || !formRef.current) return;
+    const first = formRef.current.querySelector<HTMLElement>('[aria-invalid="true"], [data-field-error]');
+    if (!first) return;
+    first.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (first.matches("input, select, textarea")) first.focus({ preventScroll: true });
+  }, [state]);
+
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    formRef.current = event.currentTarget;
     const formData = new FormData(event.currentTarget);
     startTransition(() => dispatch(formData));
   };

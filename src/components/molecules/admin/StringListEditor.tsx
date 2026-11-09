@@ -78,7 +78,7 @@ export function StringListEditor({
         </Button>
       </div>
       {error && (
-        <p id={errorId} role="alert" className="text-sm text-danger">
+        <p id={errorId} role="alert" data-field-error className="text-sm text-danger">
           {error}
         </p>
       )}
